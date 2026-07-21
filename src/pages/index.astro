@@ -1,5 +1,6 @@
 ---
 import "../styles/global.css";
+import Header from "../components/Header.astro";
 ---
 
 <!doctype html>
@@ -18,31 +19,7 @@ import "../styles/global.css";
   </head>
 
   <body>
-<header class="sticky top-0 z-50 border-b border-slate-200 bg-white/95 backdrop-blur">
-  <div class="mx-auto flex max-w-7xl items-center justify-between px-6 py-3">
-    <a href="/" aria-label="ROBENA TRADING - Acasă" class="shrink-0">
-      <img
-        src="/images/logo-robena.png"
-        alt="ROBENA TRADING"
-        class="h-16 w-auto object-contain md:h-20"
-      />
-    </a>
-
-    <nav class="hidden items-center gap-8 text-sm font-semibold text-slate-700 md:flex">
-      <a class="transition hover:text-blue-700" href="/">Acasă</a>
-      <a class="transition hover:text-blue-700" href="#produse">Produse</a>
-      <a class="transition hover:text-blue-700" href="#despre">Despre noi</a>
-      <a class="transition hover:text-blue-700" href="#contact">Contact</a>
-    </nav>
-
-    <a
-      href="#contact"
-      class="hidden rounded-lg bg-blue-700 px-5 py-3 text-sm font-semibold text-white transition hover:bg-blue-800 md:inline-flex"
-    >
-      Solicită ofertă
-    </a>
-  </div>
-</header>
+<Header />
 
     <main>
       <section class="bg-slate-50">
@@ -50,18 +27,14 @@ import "../styles/global.css";
           class="mx-auto grid min-h-[620px] max-w-7xl items-center gap-12 px-6 py-20 lg:grid-cols-2"
         >
           <div>
-            <p class="mb-4 text-sm font-semibold uppercase tracking-[0.2em] text-blue-700">
-              ROBENA TRADING
-            </p>
 
-            <h1 class="max-w-3xl text-4xl font-bold leading-tight text-slate-900 md:text-6xl">
-              Produse și echipamente pentru instituții
-            </h1>
 
-            <p class="mt-6 max-w-2xl text-lg leading-8 text-slate-600">
-              Mobilier medical, mobilier metalic, textile și produse destinate
-              spitalelor, centrelor sociale și instituțiilor publice.
-            </p>
+<h1 class="max-w-3xl text-4xl font-bold leading-tight text-slate-900 md:text-6xl">
+  Tot ce ai nevoie, într-un singur loc
+</h1>
+<p class="max-w-2xl text-lg leading-relaxed text-slate-600">
+  Oferim mobilier medical și metalic, mobilier de birou, echipamente, aparatură, textile, consumabile și numeroase alte produse profesionale pentru spitale, clinici, instituții publice, școli, companii, organizații și persoane fizice din întreaga țară.
+</p>
 
             <div class="mt-9 flex flex-wrap gap-4">
               <a
@@ -72,7 +45,7 @@ import "../styles/global.css";
               </a>
 
               <a
-                href="#contact"
+                href="/contact"
                 class="rounded-lg border border-slate-300 bg-white px-6 py-3 font-semibold text-slate-800 transition hover:border-blue-700 hover:text-blue-700"
               >
                 Solicită ofertă
@@ -81,11 +54,11 @@ import "../styles/global.css";
           </div>
 
           
-            <div class="overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-xl">
+<div class="flex items-center justify-center">
   <img
-    src="/images/hero-robena.png"
+    src="/images/hero-robena-transparent.png"
     alt="Mobilier medical și produse ROBENA TRADING"
-    class="h-[520px] w-full object-cover"
+    class="w-full max-w-[700px] object-contain"
   />
 </div>
           </div>
@@ -94,18 +67,15 @@ import "../styles/global.css";
 <section id="produse" class="bg-white">
   <div class="mx-auto max-w-7xl px-6 py-20">
     <div class="mx-auto max-w-3xl text-center">
-      <p class="text-sm font-bold uppercase tracking-[0.22em] text-blue-700">
-        Categorii de produse
-      </p>
+<h2 class="text-5xl font-bold text-slate-900">
+  Soluția potrivită pentru dumneavoastră
+</h2>
 
-      <h2 class="mt-4 text-3xl font-bold text-slate-900 md:text-5xl">
-        Soluții pentru instituții și unități medicale
-      </h2>
+<p class="mt-6 text-sm font-bold uppercase tracking-[0.22em] text-blue-700">
+  Categorii de produse
+</p>
 
-      <p class="mt-5 text-lg leading-8 text-slate-600">
-        Catalogul ROBENA va fi organizat pe categorii, iar fiecare produs va
-        avea propria pagină cu fotografii, descriere și caracteristici tehnice.
-      </p>
+
     </div>
 
     <div class="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
@@ -228,10 +198,11 @@ import "../styles/global.css";
 
     <footer id="contact" class="bg-white">
       <div class="mx-auto max-w-7xl px-6 py-12">
-        <p class="font-semibold text-slate-900">ROBENA TRADING</p>
-        <p class="mt-2 text-slate-600">
-          Datele complete de contact vor fi introduse aici.
-        </p>
+<p class="mt-4 leading-8">
+  <strong>Telefon:</strong> 0740 413 699
+  <br />
+  <strong>Email:</strong> robena.trading@yahoo.com
+</p>
       </div>
     </footer>
   </body>
