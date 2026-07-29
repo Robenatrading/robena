@@ -1,5 +1,6 @@
 ---
 import "../styles/global.css";
+import Header from "../components/Header.astro";
 ---
 
 <html lang="ro">
@@ -10,31 +11,8 @@ import "../styles/global.css";
   </head>
 
   <body class="bg-slate-50">
-    <header class="sticky top-0 z-50 border-b border-slate-200 bg-white/95 backdrop-blur">
-      <div class="mx-auto flex max-w-7xl items-center justify-between px-6 py-3">
-        <a href="/" aria-label="ROBENA TRADING - Acasă" class="shrink-0">
-          <img
-            src="/images/logo-robena.png"
-            alt="ROBENA TRADING"
-            class="h-24 w-auto object-contain md:h-32"
-          />
-        </a>
+   <Header />
 
-        <nav class="hidden items-center gap-8 text-sm font-semibold text-slate-700 md:flex">
-          <a class="transition hover:text-blue-700" href="/">Acasă</a>
-          <a class="transition hover:text-blue-700" href="/#produse">Produse</a>
-          <a class="transition hover:text-blue-700" href="/despre">Despre noi</a>
-          <a class="transition hover:text-blue-700" href="/contact">Contact</a>
-        </nav>
-
-        <a
-          href="/contact"
-          class="hidden rounded-lg bg-blue-700 px-5 py-3 text-sm font-semibold text-white transition hover:bg-blue-800 md:inline-flex"
-        >
-          Solicită ofertă
-        </a>
-      </div>
-    </header>
 
     <main>
       <div class="mx-auto max-w-5xl px-6 py-20">

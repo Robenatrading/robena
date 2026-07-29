@@ -1,5 +1,7 @@
 <header class="sticky top-0 z-50 border-b border-slate-200 bg-white/95 backdrop-blur">
-<div class="mx-auto flex max-w-7xl items-center justify-between px-6 py-0">        <a href="/" aria-label="ROBENA TRADING - Acasă" class="shrink-0">
+  <div class="mx-auto flex max-w-7xl items-center justify-between px-6 py-3">
+    <!-- Logo -->
+    <a href="/" aria-label="ROBENA TRADING - Acasă" class="shrink-0">
       <img
         src="/images/logo-robena.png"
         alt="ROBENA TRADING"
@@ -7,16 +9,17 @@
       />
     </a>
 
+    <!-- Meniu -->
     <nav class="hidden items-center gap-8 text-sm font-semibold text-slate-700 md:flex">
       <a class="transition hover:text-blue-700" href="/">
         Acasă
       </a>
 
-      <!-- Meniu Produse -->
+      <!-- Produse -->
       <div class="group relative">
-        <button
-          type="button"
-          class="flex items-center gap-2 transition hover:text-blue-700"
+        <a
+          href="/#produse"
+          class="flex items-center gap-2 py-5 transition hover:text-blue-700"
         >
           Produse
 
@@ -28,68 +31,72 @@
           >
             <path
               fill-rule="evenodd"
-              d="M5.23 7.21a.75.75 0 011.06.02L10 11.17l3.71-3.94a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z"
+              d="M5.23 7.21a.75.75 0 0 1 1.06.02L10 11.168l3.71-3.938a.75.75 0 1 1 1.08 1.04l-4.25 4.5a.75.75 0 0 1-1.08 0l-4.25-4.5a.75.75 0 0 1 .02-1.06Z"
               clip-rule="evenodd"
             />
           </svg>
-        </button>
+        </a>
 
+        <!-- Lista Produse -->
         <div
-          class="invisible absolute left-0 top-full z-50 w-64 translate-y-2 pt-4 opacity-0 transition-all duration-200 group-hover:visible group-hover:translate-y-0 group-hover:opacity-100"
+          class="invisible absolute left-1/2 top-full z-[100] w-64
+                 -translate-x-1/2 pt-2 opacity-0
+                 transition-all duration-200
+                 group-hover:visible group-hover:opacity-100"
         >
-          <div class="overflow-hidden rounded-xl border border-slate-200 bg-white py-2 shadow-xl">
+          <div class="rounded-2xl border border-slate-200 bg-white p-3 shadow-xl">
             <a
-              href="/produse/mobilier-medical"
-              class="block px-5 py-3 transition hover:bg-blue-50 hover:text-blue-700"
+              href="/produse/mobilier-medical/"
+              class="block rounded-lg px-4 py-3 hover:bg-slate-100 hover:text-blue-700"
             >
               Mobilier medical
             </a>
 
-<a
-  href="/produse/mobilier-metalic"
-  class="block px-5 py-3 transition hover:bg-blue-50 hover:text-blue-700"
->
-  Mobilier metalic
-</a>
-
-<a
-  href="/produse/mobilier-de-birou"
-  class="block px-5 py-3 transition hover:bg-blue-50 hover:text-blue-700"
->
-  Mobilier de birou
-</a>
-
-<a
-  href="/produse/aparatura"
-  class="block px-5 py-3 transition hover:bg-blue-50 hover:text-blue-700"
->
-  Aparatură
-</a>
+            <a
+              href="/produse/mobilier-metalic/"
+              class="block rounded-lg px-4 py-3 hover:bg-slate-100 hover:text-blue-700"
+            >
+              Mobilier metalic
+            </a>
 
             <a
-              href="/produse/echipamente"
-              class="block px-5 py-3 transition hover:bg-blue-50 hover:text-blue-700"
+              href="/produse/mobilier-de-birou/"
+              class="block rounded-lg px-4 py-3 hover:bg-slate-100 hover:text-blue-700"
+            >
+              Mobilier de birou
+            </a>
+
+            <a
+              href="/produse/aparatura/"
+              class="block rounded-lg px-4 py-3 hover:bg-slate-100 hover:text-blue-700"
+            >
+              Aparatură
+            </a>
+
+            <a
+              href="/produse/echipamente/"
+              class="block rounded-lg px-4 py-3 hover:bg-slate-100 hover:text-blue-700"
             >
               Echipamente
             </a>
 
             <a
-              href="/produse/textile"
-              class="block px-5 py-3 transition hover:bg-blue-50 hover:text-blue-700"
+              href="/produse/textile/"
+              class="block rounded-lg px-4 py-3 hover:bg-slate-100 hover:text-blue-700"
             >
               Textile
             </a>
 
             <a
-              href="/produse/consumabile"
-              class="block px-5 py-3 transition hover:bg-blue-50 hover:text-blue-700"
+              href="/produse/consumabile/"
+              class="block rounded-lg px-4 py-3 hover:bg-slate-100 hover:text-blue-700"
             >
               Consumabile
             </a>
 
             <a
-              href="/produse/alte-produse"
-              class="block px-5 py-3 transition hover:bg-blue-50 hover:text-blue-700"
+              href="/produse/alte-produse/"
+              class="block rounded-lg px-4 py-3 hover:bg-slate-100 hover:text-blue-700"
             >
               Alte produse
             </a>
@@ -97,18 +104,19 @@
         </div>
       </div>
 
-      <a class="transition hover:text-blue-700" href="/despre">
+      <a class="transition hover:text-blue-700" href="/despre/">
         Despre noi
       </a>
 
-      <a class="transition hover:text-blue-700" href="/contact">
+      <a class="transition hover:text-blue-700" href="/contact/">
         Contact
       </a>
     </nav>
 
+    <!-- Buton ofertă -->
     <a
-      href="/contact"
-      class="hidden rounded-lg bg-blue-700 px-5 py-3 text-sm font-semibold text-white transition hover:bg-blue-800 md:inline-flex"
+      href="/contact/"
+      class="rounded-lg bg-blue-700 px-6 py-4 text-sm font-semibold text-white transition hover:bg-blue-800"
     >
       Solicită ofertă
     </a>

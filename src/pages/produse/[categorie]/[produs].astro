@@ -1,0 +1,87 @@
+---
+import "../../../styles/global.css";
+import Header from "../../../components/Header.astro";
+import { produse } from "../../../data/produse.js";
+
+export function getStaticPaths() {
+  return produse.map((produs) => ({
+    params: {
+      categorie: produs.categorie,
+      produs: produs.slug,
+    },
+
+    props: {
+      produs,
+    },
+  }));
+}
+
+const { produs } = Astro.props;
+---
+
+<!doctype html>
+<html lang="ro">
+  <head>
+    <meta charset="UTF-8" />
+
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0"
+    />
+
+    <meta name="description" content={produs.descriere} />
+
+    <title>{produs.nume} | ROBENA TRADING</title>
+  </head>
+
+  <body class="bg-slate-50 text-slate-900">
+    <Header />
+
+    <main>
+      <section class="mx-auto max-w-7xl px-6 py-16">
+        <a
+          href={`/produse/${produs.categorie}/`}
+          class="font-semibold text-blue-700 hover:underline"
+        >
+          ← Înapoi la {produs.categorieNume}
+        </a>
+
+        <div class="mt-10 grid items-center gap-12 lg:grid-cols-2">
+          <div class="flex min-h-[500px] items-center justify-center rounded-3xl bg-white p-8">
+            <img
+              src={produs.imagine}
+              alt={produs.nume}
+              class="max-h-[520px] w-full object-contain"
+            />
+          </div>
+
+          <div>
+            <p class="font-semibold uppercase tracking-[0.25em] text-blue-700">
+              {produs.categorieNume}
+            </p>
+
+            <h1 class="mt-4 text-4xl font-bold leading-tight md:text-5xl">
+              {produs.nume}
+            </h1>
+
+            <p class="mt-7 text-lg leading-8 text-slate-700">
+              {produs.descriere}
+            </p>
+
+            <p class="mt-5 leading-8 text-slate-600">
+              Pentru informații suplimentare, configurații disponibile,
+              personalizare și ofertă de preț, vă rugăm să ne contactați.
+            </p>
+
+            <a
+              href="/contact/"
+              class="mt-8 inline-flex rounded-lg bg-blue-700 px-7 py-4 font-semibold text-white transition hover:bg-blue-800"
+            >
+              Solicită ofertă
+            </a>
+          </div>
+        </div>
+      </section>
+    </main>
+  </body>
+</html>
