@@ -64,14 +64,6 @@ const { categorie } = Astro.props;
           </p>
         </div>
 
-        <div
-          id="loading-produse"
-          class="mx-auto mt-12 max-w-2xl rounded-2xl bg-white p-10 text-center shadow-sm"
-        >
-          <p class="text-lg font-semibold">
-            Se încarcă produsele...
-          </p>
-        </div>
 
         <div
           id="eroare-produse"
@@ -111,8 +103,6 @@ const { categorie } = Astro.props;
     <script>
       import { supabase } from "../../../lib/supabase.js";
 
-      const loadingProduse =
-        document.querySelector("#loading-produse");
 
       const eroareProduse =
         document.querySelector("#eroare-produse");
@@ -146,7 +136,6 @@ const { categorie } = Astro.props;
             .eq("categorie_id", categorieId)
             .order("ordine", { ascending: true });
 
-          loadingProduse.classList.add("hidden");
 
           if (error) {
             throw error;
