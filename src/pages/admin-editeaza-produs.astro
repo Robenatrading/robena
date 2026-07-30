@@ -1,0 +1,503 @@
+---
+import "../styles/global.css";
+---
+
+<!doctype html>
+<html lang="ro">
+  <head>
+    <meta charset="UTF-8" />
+
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0"
+    />
+
+    <title>Modifică produs | ROBENA TRADING</title>
+  </head>
+
+  <body class="min-h-screen bg-slate-100 text-slate-900">
+    <main class="mx-auto max-w-3xl px-6 py-10">
+      <div class="mb-8 flex items-center justify-between">
+        <div>
+          <h1 class="text-3xl font-bold">
+            Modifică produs
+          </h1>
+
+          <p class="mt-2 text-slate-600">
+            Actualizează datele produsului.
+          </p>
+        </div>
+
+        <a
+          href="/admin-lista-produse/"
+          class="rounded-lg bg-slate-900 px-5 py-3 font-semibold text-white hover:bg-slate-700"
+        >
+          Înapoi
+        </a>
+      </div>
+
+      <section
+        id="loading"
+        class="rounded-xl bg-white p-6 shadow"
+      >
+        Se încarcă produsul...
+      </section>
+
+      <section
+        id="admin-content"
+        class="hidden rounded-xl bg-white p-6 shadow"
+      >
+        <form id="product-form" class="space-y-5">
+          <div>
+            <label
+              for="nume"
+              class="mb-2 block text-sm font-semibold"
+            >
+              Nume produs
+            </label>
+
+            <input
+              id="nume"
+              type="text"
+              required
+              class="w-full rounded-lg border border-slate-300 px-4 py-3"
+            />
+          </div>
+
+          <div>
+            <label
+              for="slug"
+              class="mb-2 block text-sm font-semibold"
+            >
+              Slug
+            </label>
+
+            <input
+              id="slug"
+              type="text"
+              required
+              class="w-full rounded-lg border border-slate-300 px-4 py-3"
+            />
+          </div>
+
+          <div>
+            <label
+              for="descriere"
+              class="mb-2 block text-sm font-semibold"
+            >
+              Descriere
+            </label>
+
+            <textarea
+              id="descriere"
+              rows="6"
+              required
+              class="w-full rounded-lg border border-slate-300 px-4 py-3"
+            ></textarea>
+          </div>
+
+          <div>
+            <label
+              for="categorie"
+              class="mb-2 block text-sm font-semibold"
+            >
+              Categorie
+            </label>
+
+            <select
+              id="categorie"
+              required
+              class="w-full rounded-lg border border-slate-300 px-4 py-3"
+            >
+              <option value="">
+                Selectează categoria
+              </option>
+            </select>
+          </div>
+
+          <div>
+            <p class="mb-2 block text-sm font-semibold">
+              Imagine curentă
+            </p>
+
+            <img
+              id="imagine-curenta"
+              src=""
+              alt="Imagine produs"
+              class="h-56 w-full rounded-lg bg-slate-50 object-contain p-3"
+            />
+          </div>
+
+          <div>
+            <label
+              for="imagine-noua"
+              class="mb-2 block text-sm font-semibold"
+            >
+              Imagine nouă
+            </label>
+
+            <input
+              id="imagine-noua"
+              type="file"
+              accept="image/png,image/jpeg,image/webp"
+              class="w-full rounded-lg border border-slate-300 bg-white px-4 py-3"
+            />
+
+            <p class="mt-2 text-sm text-slate-500">
+              Lasă necompletat dacă păstrezi imaginea actuală.
+            </p>
+          </div>
+
+          <div>
+            <label
+              for="ordine"
+              class="mb-2 block text-sm font-semibold"
+            >
+              Ordine
+            </label>
+
+            <input
+              id="ordine"
+              type="number"
+              min="1"
+              required
+              class="w-full rounded-lg border border-slate-300 px-4 py-3"
+            />
+          </div>
+
+          <button
+            id="submit-button"
+            type="submit"
+            class="rounded-lg bg-blue-700 px-6 py-3 font-semibold text-white hover:bg-blue-800 disabled:cursor-not-allowed disabled:opacity-60"
+          >
+            Salvează modificările
+          </button>
+
+          <p
+            id="message"
+            class="hidden rounded-lg px-4 py-3 text-sm"
+          ></p>
+        </form>
+      </section>
+    </main>
+
+    <script>
+      import { supabase } from "../lib/supabase.js";
+
+      const loading = document.querySelector("#loading");
+      const adminContent = document.querySelector("#admin-content");
+      const form = document.querySelector("#product-form");
+      const categorieSelect = document.querySelector("#categorie");
+      const imagineCurenta = document.querySelector("#imagine-curenta");
+      const imagineNouaInput = document.querySelector("#imagine-noua");
+      const submitButton = document.querySelector("#submit-button");
+      const message = document.querySelector("#message");
+
+      const numeInput = document.querySelector("#nume");
+      const slugInput = document.querySelector("#slug");
+      const descriereInput = document.querySelector("#descriere");
+      const ordineInput = document.querySelector("#ordine");
+
+      const params = new URLSearchParams(window.location.search);
+      const produsId = Number(params.get("id"));
+
+      let produsCurent = null;
+
+      function showMessage(text, type = "error") {
+        message.textContent = text;
+
+        message.classList.remove(
+          "hidden",
+          "bg-red-100",
+          "text-red-700",
+          "bg-green-100",
+          "text-green-700"
+        );
+
+        if (type === "success") {
+          message.classList.add(
+            "bg-green-100",
+            "text-green-700"
+          );
+        } else {
+          message.classList.add(
+            "bg-red-100",
+            "text-red-700"
+          );
+        }
+      }
+
+      function resetSubmitButton() {
+        submitButton.disabled = false;
+        submitButton.textContent = "Salvează modificările";
+      }
+
+      function ascundeIncarcarea() {
+        loading.classList.add("hidden");
+      }
+
+      async function initializeazaPagina() {
+        const {
+          data: { session },
+          error: sessionError,
+        } = await supabase.auth.getSession();
+
+        if (sessionError) {
+          showMessage(
+            "Sesiunea nu a putut fi verificată: " +
+              sessionError.message
+          );
+
+          ascundeIncarcarea();
+          return;
+        }
+
+        if (!session) {
+          window.location.href = "/admin/";
+          return;
+        }
+
+        if (!produsId || Number.isNaN(produsId)) {
+          showMessage("Produsul nu a fost identificat.");
+          ascundeIncarcarea();
+          return;
+        }
+
+        const { data: categorii, error: categoriiError } =
+          await supabase
+            .from("categorii")
+            .select("id, nume")
+            .order("ordine", { ascending: true });
+
+        if (categoriiError) {
+          showMessage(
+            "Categoriile nu au putut fi încărcate: " +
+              categoriiError.message
+          );
+
+          ascundeIncarcarea();
+          return;
+        }
+
+        categorieSelect.innerHTML = `
+          <option value="">
+            Selectează categoria
+          </option>
+        `;
+
+        (categorii || []).forEach((categorie) => {
+          const option = document.createElement("option");
+
+          option.value = String(categorie.id);
+          option.textContent = categorie.nume;
+
+          categorieSelect.appendChild(option);
+        });
+
+        const { data: produs, error: produsError } =
+          await supabase
+            .from("produse")
+            .select(`
+              id,
+              nume,
+              slug,
+              descriere,
+              imagine,
+              ordine,
+              categorie_id
+            `)
+            .eq("id", produsId)
+            .single();
+
+        if (produsError) {
+          showMessage(
+            "Produsul nu a putut fi încărcat: " +
+              produsError.message
+          );
+
+          ascundeIncarcarea();
+          return;
+        }
+
+        produsCurent = produs;
+
+        numeInput.value = produs.nume || "";
+        slugInput.value = produs.slug || "";
+        descriereInput.value = produs.descriere || "";
+        categorieSelect.value = String(
+          produs.categorie_id || ""
+        );
+        ordineInput.value = produs.ordine || 1;
+
+        imagineCurenta.src = produs.imagine
+          ? `${produs.imagine}?v=${Date.now()}`
+          : "";
+
+        imagineCurenta.alt =
+          produs.nume || "Imagine produs";
+
+        ascundeIncarcarea();
+        adminContent.classList.remove("hidden");
+      }
+
+      imagineNouaInput.addEventListener("change", () => {
+        const fisierNou = imagineNouaInput.files[0];
+
+        if (!fisierNou) {
+          return;
+        }
+
+        const previewUrl = URL.createObjectURL(fisierNou);
+
+        imagineCurenta.src = previewUrl;
+        imagineCurenta.alt = "Previzualizare imagine nouă";
+      });
+
+      form.addEventListener("submit", async (event) => {
+        event.preventDefault();
+
+        if (!produsCurent) {
+          showMessage("Produsul nu este încărcat.");
+          return;
+        }
+
+        submitButton.disabled = true;
+        submitButton.textContent = "Se salvează...";
+
+        message.classList.add("hidden");
+
+        try {
+          let imagineFinala = produsCurent.imagine || "";
+
+          const fisierNou = imagineNouaInput.files[0];
+
+          if (fisierNou) {
+            const tipuriAcceptate = [
+              "image/png",
+              "image/jpeg",
+              "image/webp",
+            ];
+
+            if (!tipuriAcceptate.includes(fisierNou.type)) {
+              throw new Error(
+                "Imaginea trebuie să fie PNG, JPG, JPEG sau WEBP."
+              );
+            }
+
+            const extensieInitiala =
+              fisierNou.name.split(".").pop() || "png";
+
+            const extensie = extensieInitiala
+              .toLowerCase()
+              .replace(/[^a-z0-9]/g, "");
+
+            const numeFisier =
+              `produs-${produsId}-${Date.now()}.${extensie}`;
+
+            const { error: uploadError } =
+              await supabase.storage
+                .from("produse")
+                .upload(numeFisier, fisierNou, {
+                  cacheControl: "0",
+                  upsert: false,
+                  contentType: fisierNou.type,
+                });
+
+            if (uploadError) {
+              throw new Error(
+                "Imaginea nouă nu a putut fi încărcată: " +
+                  uploadError.message
+              );
+            }
+
+            const { data: publicUrlData } =
+              supabase.storage
+                .from("produse")
+                .getPublicUrl(numeFisier);
+
+            if (!publicUrlData?.publicUrl) {
+              throw new Error(
+                "Adresa publică a imaginii nu a putut fi generată."
+              );
+            }
+
+            imagineFinala = publicUrlData.publicUrl;
+          }
+
+          const modificari = {
+            nume: numeInput.value.trim(),
+            slug: slugInput.value.trim(),
+            descriere: descriereInput.value.trim(),
+            categorie_id: Number(categorieSelect.value),
+            imagine: imagineFinala,
+            ordine: Number(ordineInput.value),
+          };
+
+          if (
+            !modificari.nume ||
+            !modificari.slug ||
+            !modificari.descriere ||
+            !modificari.categorie_id ||
+            !modificari.ordine
+          ) {
+            throw new Error(
+              "Completează toate câmpurile obligatorii."
+            );
+          }
+
+          const {
+            data: produsActualizat,
+            error: updateError,
+          } = await supabase
+            .from("produse")
+            .update(modificari)
+            .eq("id", produsId)
+            .select(`
+              id,
+              nume,
+              slug,
+              descriere,
+              imagine,
+              ordine,
+              categorie_id
+            `)
+            .single();
+
+          if (updateError) {
+            throw new Error(
+              "Produsul nu a putut fi modificat: " +
+                updateError.message
+            );
+          }
+
+          produsCurent = produsActualizat;
+
+          imagineCurenta.src =
+            `${produsActualizat.imagine}?v=${Date.now()}`;
+
+          imagineCurenta.alt =
+            produsActualizat.nume || "Imagine produs";
+
+          imagineNouaInput.value = "";
+
+          showMessage(
+            "Produsul a fost modificat cu succes.",
+            "success"
+          );
+        } catch (error) {
+          console.error(error);
+
+          showMessage(
+            error instanceof Error
+              ? error.message
+              : "A apărut o eroare necunoscută."
+          );
+        } finally {
+          resetSubmitButton();
+        }
+      });
+
+      initializeazaPagina();
+    </script>
+  </body>
+</html>

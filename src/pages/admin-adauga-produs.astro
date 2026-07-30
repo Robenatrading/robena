@@ -1,0 +1,351 @@
+---
+import "../styles/global.css";
+---
+
+<!doctype html>
+<html lang="ro">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0"
+    />
+
+    <title>Adaugă produs | ROBENA TRADING</title>
+  </head>
+
+  <body class="min-h-screen bg-slate-100 text-slate-900">
+    <main class="mx-auto max-w-3xl px-6 py-10">
+      <div class="mb-8 flex items-center justify-between">
+        <div>
+          <h1 class="text-3xl font-bold">Adaugă produs</h1>
+
+          <p class="mt-2 text-slate-600">
+            Completează datele produsului.
+          </p>
+        </div>
+
+        <a
+          href="/admin-produse/"
+          class="rounded-lg bg-slate-900 px-5 py-3 font-semibold text-white hover:bg-slate-700"
+        >
+          Înapoi
+        </a>
+      </div>
+
+      <section
+        id="loading"
+        class="rounded-xl bg-white p-6 shadow"
+      >
+        Se verifică autentificarea...
+      </section>
+
+      <section
+        id="admin-content"
+        class="hidden rounded-xl bg-white p-6 shadow"
+      >
+        <form id="product-form" class="space-y-5">
+          <div>
+            <label
+              for="nume"
+              class="mb-2 block text-sm font-semibold"
+            >
+              Nume produs
+            </label>
+
+            <input
+              id="nume"
+              type="text"
+              required
+              class="w-full rounded-lg border border-slate-300 px-4 py-3 outline-none focus:border-blue-600"
+            />
+          </div>
+
+          <div>
+            <label
+              for="slug"
+              class="mb-2 block text-sm font-semibold"
+            >
+              Slug
+            </label>
+
+            <input
+              id="slug"
+              type="text"
+              required
+              class="w-full rounded-lg border border-slate-300 px-4 py-3 outline-none focus:border-blue-600"
+              placeholder="carucior-medical-multifunctional"
+            />
+
+            <p class="mt-2 text-sm text-slate-500">
+              Se generează automat din numele produsului.
+            </p>
+          </div>
+
+          <div>
+            <label
+              for="descriere"
+              class="mb-2 block text-sm font-semibold"
+            >
+              Descriere
+            </label>
+
+            <textarea
+              id="descriere"
+              rows="6"
+              required
+              class="w-full rounded-lg border border-slate-300 px-4 py-3 outline-none focus:border-blue-600"
+            ></textarea>
+          </div>
+
+          <div>
+            <label
+              for="categorie"
+              class="mb-2 block text-sm font-semibold"
+            >
+              Categorie
+            </label>
+
+            <select
+              id="categorie"
+              required
+              class="w-full rounded-lg border border-slate-300 px-4 py-3 outline-none focus:border-blue-600"
+            >
+              <option value="">Selectează categoria</option>
+            </select>
+          </div>
+
+          <div>
+            <label
+              for="imagine"
+              class="mb-2 block text-sm font-semibold"
+            >
+              Imagine produs
+            </label>
+
+            <input
+              id="imagine"
+              type="file"
+              accept="image/png,image/jpeg,image/webp"
+              required
+              class="w-full rounded-lg border border-slate-300 bg-white px-4 py-3"
+            />
+
+            <p class="mt-2 text-sm text-slate-500">
+              Formate acceptate: PNG, JPG și WEBP.
+            </p>
+          </div>
+
+          <div>
+            <label
+              for="ordine"
+              class="mb-2 block text-sm font-semibold"
+            >
+              Ordine
+            </label>
+
+            <input
+              id="ordine"
+              type="number"
+              min="1"
+              value="1"
+              required
+              class="w-full rounded-lg border border-slate-300 px-4 py-3 outline-none focus:border-blue-600"
+            />
+          </div>
+
+          <button
+            id="submit-button"
+            type="submit"
+            class="rounded-lg bg-blue-700 px-6 py-3 font-semibold text-white hover:bg-blue-800 disabled:cursor-not-allowed disabled:opacity-60"
+          >
+            Salvează produsul
+          </button>
+
+          <p
+            id="message"
+            class="hidden rounded-lg px-4 py-3 text-sm"
+          ></p>
+        </form>
+      </section>
+    </main>
+
+    <script>
+      import { supabase } from "../lib/supabase.js";
+
+      const loading = document.querySelector("#loading");
+      const adminContent = document.querySelector("#admin-content");
+      const form = document.querySelector("#product-form");
+      const numeInput = document.querySelector("#nume");
+      const slugInput = document.querySelector("#slug");
+      const categorieSelect = document.querySelector("#categorie");
+      const imagineInput = document.querySelector("#imagine");
+      const submitButton = document.querySelector("#submit-button");
+      const message = document.querySelector("#message");
+
+      function showMessage(text, type = "error") {
+        message.textContent = text;
+
+        message.classList.remove(
+          "hidden",
+          "bg-red-100",
+          "text-red-700",
+          "bg-green-100",
+          "text-green-700"
+        );
+
+        if (type === "success") {
+          message.classList.add("bg-green-100", "text-green-700");
+        } else {
+          message.classList.add("bg-red-100", "text-red-700");
+        }
+      }
+
+      function createSlug(text) {
+        return text
+          .normalize("NFD")
+          .replace(/[\u0300-\u036f]/g, "")
+          .toLowerCase()
+          .trim()
+          .replace(/[^a-z0-9]+/g, "-")
+          .replace(/^-+|-+$/g, "");
+      }
+
+      numeInput.addEventListener("input", () => {
+        slugInput.value = createSlug(numeInput.value);
+      });
+
+      const {
+        data: { session },
+      } = await supabase.auth.getSession();
+
+      if (!session) {
+        window.location.href = "/admin/";
+      } else {
+        loading.classList.add("hidden");
+        adminContent.classList.remove("hidden");
+      }
+
+      const { data: categorii, error: categoriiError } =
+        await supabase
+          .from("categorii")
+          .select("id, nume")
+          .order("id");
+
+      if (categoriiError) {
+        showMessage(
+          "Categoriile nu au putut fi încărcate: " +
+            categoriiError.message
+        );
+      } else {
+        categorii.forEach((categorie) => {
+          const option = document.createElement("option");
+          option.value = categorie.id;
+          option.textContent = categorie.nume;
+          categorieSelect.appendChild(option);
+        });
+      }
+
+      form.addEventListener("submit", async (event) => {
+        event.preventDefault();
+
+        submitButton.disabled = true;
+        submitButton.textContent = "Se salvează...";
+
+        const nume = numeInput.value.trim();
+        const slug = slugInput.value.trim();
+        const descriere = document
+          .querySelector("#descriere")
+          .value.trim();
+
+        const categorieId = Number(categorieSelect.value);
+
+        const ordine = Number(
+          document.querySelector("#ordine").value
+        );
+
+        const fisierImagine = imagineInput.files[0];
+
+        if (!fisierImagine) {
+          showMessage("Selectează o imagine pentru produs.");
+          submitButton.disabled = false;
+          submitButton.textContent = "Salvează produsul";
+          return;
+        }
+
+        const extensie = fisierImagine.name
+          .split(".")
+          .pop()
+          .toLowerCase();
+
+        const numeFisier =
+          `${slug}-${Date.now()}.${extensie}`;
+
+        const { error: uploadError } =
+          await supabase.storage
+            .from("produse")
+            .upload(numeFisier, fisierImagine, {
+              cacheControl: "3600",
+              upsert: false,
+              contentType: fisierImagine.type,
+            });
+
+        if (uploadError) {
+          showMessage(
+            "Imaginea nu a putut fi încărcată: " +
+              uploadError.message
+          );
+
+          submitButton.disabled = false;
+          submitButton.textContent = "Salvează produsul";
+          return;
+        }
+
+        const { data: publicUrlData } =
+          supabase.storage
+            .from("produse")
+            .getPublicUrl(numeFisier);
+
+        const produs = {
+          nume,
+          slug,
+          descriere,
+          categorie_id: categorieId,
+          imagine: publicUrlData.publicUrl,
+          ordine,
+        };
+
+        const { error: insertError } =
+          await supabase
+            .from("produse")
+            .insert(produs);
+
+        if (insertError) {
+          await supabase.storage
+            .from("produse")
+            .remove([numeFisier]);
+
+          showMessage(
+            "Produsul nu a putut fi salvat: " +
+              insertError.message
+          );
+
+          submitButton.disabled = false;
+          submitButton.textContent = "Salvează produsul";
+          return;
+        }
+
+        showMessage(
+          "Produsul și imaginea au fost adăugate cu succes.",
+          "success"
+        );
+
+        form.reset();
+        slugInput.value = "";
+
+        submitButton.disabled = false;
+        submitButton.textContent = "Salvează produsul";
+      });
+    </script>
+  </body>
+</html>

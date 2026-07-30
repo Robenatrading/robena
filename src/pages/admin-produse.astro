@@ -56,11 +56,12 @@ import "../styles/global.css";
               Creează un produs nou în baza de date.
             </p>
 
-            <button
-              class="mt-5 rounded-lg bg-blue-700 px-5 py-3 font-semibold text-white hover:bg-blue-800"
-            >
-              Adaugă produs
-            </button>
+<a
+  href="/admin-adauga-produs/"
+  class="mt-5 inline-block rounded-lg bg-blue-700 px-5 py-3 font-semibold text-white hover:bg-blue-800"
+>
+  Adaugă produs
+</a>
           </article>
 
           <article class="rounded-xl bg-white p-6 shadow">
@@ -72,11 +73,12 @@ import "../styles/global.css";
               Modifică sau șterge produsele existente.
             </p>
 
-            <button
-              class="mt-5 rounded-lg bg-blue-700 px-5 py-3 font-semibold text-white hover:bg-blue-800"
-            >
-              Vezi produsele
-            </button>
+<a
+  href="/admin-lista-produse/"
+  class="mt-5 inline-block rounded-lg bg-blue-700 px-5 py-3 font-semibold text-white hover:bg-blue-800"
+>
+  Vezi produsele
+</a>
           </article>
 
           <article class="rounded-xl bg-white p-6 shadow">
@@ -88,38 +90,38 @@ import "../styles/global.css";
               Gestionează categoriile produselor.
             </p>
 
-            <button
-              class="mt-5 rounded-lg bg-blue-700 px-5 py-3 font-semibold text-white hover:bg-blue-800"
-            >
-              Vezi categoriile
-            </button>
+<a
+  href="/admin-categorii/"
+  class="mt-5 inline-block rounded-lg bg-blue-700 px-5 py-3 font-semibold text-white hover:bg-blue-800"
+>
+  Vezi categoriile
+</a>
           </article>
         </div>
       </section>
     </main>
 
-    <script>
-      import { supabase } from "../lib/supabase.js";
+<script>
+  import { supabase } from "../lib/supabase.js";
 
-      const loading = document.querySelector("#loading");
-      const adminContent = document.querySelector("#admin-content");
-      const logoutButton = document.querySelector("#logout-button");
+  const loading = document.querySelector("#loading");
+  const adminContent = document.querySelector("#admin-content");
+  const logoutButton = document.querySelector("#logout-button");
 
-      const {
-        data: { session },
-      } = await supabase.auth.getSession();
+  const {
+    data: { session },
+  } = await supabase.auth.getSession();
 
-      if (!session) {
-        window.location.href = "/admin";
-      } else {
-        loading.classList.add("hidden");
-        adminContent.classList.remove("hidden");
-      }
+  if (!session) {
+    window.location.href = "/admin/";
+  } else {
+    loading.classList.add("hidden");
+    adminContent.classList.remove("hidden");
+  }
 
-      logoutButton.addEventListener("click", async () => {
-        await supabase.auth.signOut();
-        window.location.href = "/admin";
-      });
-    </script>
-  </body>
+  logoutButton.addEventListener("click", async () => {
+    await supabase.auth.signOut();
+    window.location.href = "/admin/";
+  });
+</script>  </body>
 </html>
