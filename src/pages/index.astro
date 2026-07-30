@@ -1,28 +1,40 @@
 ---
 import "../styles/global.css";
 import Header from "../components/Header.astro";
+import { supabase } from "../lib/supabase.js";
+
+const { data: categorii, error } = await supabase
+  .from("categorii")
+  .select("id, nume, slug, imagine, ordine")
+  .order("ordine", { ascending: true });
+
+if (error) {
+  console.error("Eroare la încărcarea categoriilor:", error);
+}
 ---
 
 <!doctype html>
 <html lang="ro">
   <head>
     <meta charset="UTF-8" />
+
     <meta
       name="viewport"
       content="width=device-width, initial-scale=1.0"
     />
-<meta
-  name="description"
-  content="ROBENA TRADING – mobilier medical, mobilier metalic, textile și produse pentru instituții."
-/>
 
-<link rel="icon" type="image/png" href="/favicon.png?v=2" />
+    <meta
+      name="description"
+      content="ROBENA TRADING – mobilier medical, mobilier metalic, textile și produse pentru instituții."
+    />
 
-<title>ROBENA TRADING | Mobilier medical și metalic</title>
+    <link rel="icon" type="image/png" href="/favicon.png?v=2" />
+
+    <title>ROBENA TRADING | Mobilier medical și metalic</title>
   </head>
 
   <body>
-<Header />
+    <Header />
 
     <main>
       <section class="bg-slate-50">
@@ -30,14 +42,19 @@ import Header from "../components/Header.astro";
           class="mx-auto grid min-h-[620px] max-w-7xl items-center gap-12 px-6 py-20 lg:grid-cols-2"
         >
           <div>
+            <h1
+              class="max-w-3xl text-4xl font-bold leading-tight text-slate-900 md:text-6xl"
+            >
+              Tot ce ai nevoie, într-un singur loc
+            </h1>
 
-
-<h1 class="max-w-3xl text-4xl font-bold leading-tight text-slate-900 md:text-6xl">
-  Tot ce ai nevoie, într-un singur loc
-</h1>
-<p class="max-w-2xl text-lg leading-relaxed text-slate-600">
-  Oferim mobilier medical și metalic, mobilier de birou, echipamente, aparatură, textile, consumabile și numeroase alte produse profesionale pentru spitale, clinici, instituții publice, școli, companii, organizații și persoane fizice din întreaga țară.
-</p>
+            <p class="max-w-2xl text-lg leading-relaxed text-slate-600">
+              Oferim mobilier medical și metalic, mobilier de birou,
+              echipamente, aparatură, textile, consumabile și numeroase alte
+              produse profesionale pentru spitale, clinici, instituții
+              publice, școli, companii, organizații și persoane fizice din
+              întreaga țară.
+            </p>
 
             <div class="mt-9 flex flex-wrap gap-4">
               <a
@@ -48,7 +65,7 @@ import Header from "../components/Header.astro";
               </a>
 
               <a
-                href="/contact"
+                href="/contact/"
                 class="rounded-lg border border-slate-300 bg-white px-6 py-3 font-semibold text-slate-800 transition hover:border-blue-700 hover:text-blue-700"
               >
                 Solicită ofertă
@@ -56,273 +73,84 @@ import Header from "../components/Header.astro";
             </div>
           </div>
 
-          
-<div class="flex items-center justify-center">
-  <img
-    src="/images/hero-robena-transparent.png"
-    alt="Mobilier medical și produse ROBENA TRADING"
-    class="w-full max-w-[700px] object-contain"
-  />
-</div>
+          <div class="flex items-center justify-center">
+            <img
+              src="/images/hero-robena-transparent.png"
+              alt="Mobilier medical și produse ROBENA TRADING"
+              class="w-full max-w-[700px] object-contain"
+            />
           </div>
+        </div>
       </section>
 
-<section id="produse" class="bg-white">
-  <div class="mx-auto max-w-7xl px-2 py-12 sm:px-4 md:px-6 md:py-20">
+      <section id="produse" class="bg-white">
+        <div class="mx-auto max-w-7xl px-2 py-12 sm:px-4 md:px-6 md:py-20">
+          <div class="mx-auto max-w-3xl text-center">
+            <h2
+              class="text-3xl font-bold leading-tight text-slate-900 md:text-5xl"
+            >
+              Soluția potrivită pentru dumneavoastră
+            </h2>
 
-    <!-- Titlul secțiunii -->
-    <div class="mx-auto max-w-3xl text-center">
-      <h2 class="text-3xl font-bold leading-tight text-slate-900 md:text-5xl">
-        Soluția potrivită pentru dumneavoastră
-      </h2>
+            <p
+              class="mt-4 text-xs font-bold uppercase tracking-[0.18em] text-blue-700 md:mt-6 md:text-sm md:tracking-[0.22em]"
+            >
+              Categorii de produse
+            </p>
+          </div>
 
-      <p class="mt-4 text-xs font-bold uppercase tracking-[0.18em] text-blue-700 md:mt-6 md:text-sm md:tracking-[0.22em]">
-        Categorii de produse
-      </p>
-    </div>
+          <div
+            class="mt-8 grid grid-cols-3 gap-2 sm:gap-4 md:mt-12 md:gap-7"
+          >
+            {
+              categorii && categorii.length > 0 ? (
+                categorii.map((categorie) => (
+                  <a
+                    href={`/produse/${categorie.slug}/`}
+                    class="group flex min-w-0 flex-col overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm transition duration-300 hover:-translate-y-1 hover:border-blue-300 hover:shadow-xl md:rounded-2xl"
+                  >
+                    <div class="h-24 overflow-hidden bg-slate-100 sm:h-36 md:h-52">
+                      <img
+                        src={categorie.imagine}
+                        alt={`${categorie.nume} ROBENA TRADING`}
+                        class="h-full w-full object-cover transition duration-500 group-hover:scale-105"
+                        loading="lazy"
+                      />
+                    </div>
 
-    <!-- 3 categorii pe fiecare rând, pe toate dispozitivele -->
-    <div class="mt-8 grid grid-cols-3 gap-2 sm:gap-4 md:mt-12 md:gap-7">
+                    <div class="flex flex-1 flex-col p-2 sm:p-3 md:p-6">
+                      <h3
+                        class="text-xs font-bold leading-tight text-slate-900 sm:text-base md:text-xl"
+                      >
+                        {categorie.nume}
+                      </h3>
 
-      <!-- 1. Mobilier medical -->
-      <a
-        href="/produse/mobilier-medical"
-        class="group flex min-w-0 flex-col overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm transition duration-300 hover:-translate-y-1 hover:border-blue-300 hover:shadow-xl md:rounded-2xl"
-      >
-        <div class="h-24 overflow-hidden bg-slate-100 sm:h-36 md:h-52">
-          <img
-            src="/images/categorii/mobilier-medical-robena-trading.png"
-            alt="Mobilier medical ROBENA TRADING"
-            class="h-full w-full object-cover transition duration-500 group-hover:scale-105"
-          />
+                      <span
+                        class="mt-auto inline-flex items-center gap-1 pt-3 text-[10px] font-semibold text-blue-700 sm:text-sm md:gap-2 md:pt-6 md:text-base"
+                      >
+                        Vezi produsele
+                        <span class="transition group-hover:translate-x-1">
+                          →
+                        </span>
+                      </span>
+                    </div>
+                  </a>
+                ))
+              ) : (
+                <p class="col-span-3 text-center text-slate-600">
+                  Categoriile nu au putut fi încărcate.
+                </p>
+              )
+            }
+          </div>
         </div>
-
-        <div class="flex flex-1 flex-col p-2 sm:p-3 md:p-6">
-          <h3 class="text-xs font-bold leading-tight text-slate-900 sm:text-base md:text-xl">
-            Mobilier medical
-          </h3>
-
-          <p class="mt-2 hidden leading-7 text-slate-600 sm:block sm:text-sm md:text-base">
-            Paturi, noptiere, cărucioare, mese și mobilier pentru spitale.
-          </p>
-
-          <span class="mt-auto inline-flex items-center gap-1 pt-3 text-[10px] font-semibold text-blue-700 sm:text-sm md:gap-2 md:pt-6 md:text-base">
-            Vezi produsele
-            <span class="transition group-hover:translate-x-1">→</span>
-          </span>
-        </div>
-      </a>
-
-      <!-- 2. Mobilier metalic -->
-      <a
-        href="/produse/mobilier-metalic"
-        class="group flex min-w-0 flex-col overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm transition duration-300 hover:-translate-y-1 hover:border-blue-300 hover:shadow-xl md:rounded-2xl"
-      >
-        <div class="h-24 overflow-hidden bg-slate-100 sm:h-36 md:h-52">
-          <img
-            src="/images/categorii/mobilier-metalic-robena-trading.png"
-            alt="Mobilier metalic ROBENA TRADING"
-            class="h-full w-full object-cover transition duration-500 group-hover:scale-105"
-          />
-        </div>
-
-        <div class="flex flex-1 flex-col p-2 sm:p-3 md:p-6">
-          <h3 class="text-xs font-bold leading-tight text-slate-900 sm:text-base md:text-xl">
-            Mobilier metalic
-          </h3>
-
-          <p class="mt-2 hidden leading-7 text-slate-600 sm:block sm:text-sm md:text-base">
-            Dulapuri, rafturi, vestiare și mobilier metalic pentru instituții.
-          </p>
-
-          <span class="mt-auto inline-flex items-center gap-1 pt-3 text-[10px] font-semibold text-blue-700 sm:text-sm md:gap-2 md:pt-6 md:text-base">
-            Vezi produsele
-            <span class="transition group-hover:translate-x-1">→</span>
-          </span>
-        </div>
-      </a>
-
-      <!-- 3. Mobilier de birou -->
-      <a
-        href="/produse/mobilier-de-birou"
-        class="group flex min-w-0 flex-col overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm transition duration-300 hover:-translate-y-1 hover:border-blue-300 hover:shadow-xl md:rounded-2xl"
-      >
-        <div class="h-24 overflow-hidden bg-slate-100 sm:h-36 md:h-52">
-          <img
-            src="/images/categorii/mobilier-birou-robena-trading.png"
-            alt="Mobilier de birou ROBENA TRADING"
-            class="h-full w-full object-cover transition duration-500 group-hover:scale-105"
-          />
-        </div>
-
-        <div class="flex flex-1 flex-col p-2 sm:p-3 md:p-6">
-          <h3 class="text-xs font-bold leading-tight text-slate-900 sm:text-base md:text-xl">
-            Mobilier de birou
-          </h3>
-
-          <p class="mt-2 hidden leading-7 text-slate-600 sm:block sm:text-sm md:text-base">
-            Birouri, scaune, dulapuri și mobilier pentru spații profesionale.
-          </p>
-
-          <span class="mt-auto inline-flex items-center gap-1 pt-3 text-[10px] font-semibold text-blue-700 sm:text-sm md:gap-2 md:pt-6 md:text-base">
-            Vezi produsele
-            <span class="transition group-hover:translate-x-1">→</span>
-          </span>
-        </div>
-      </a>
-
-      <!-- 4. Aparatură medicală -->
-      <a
-        href="/produse/aparatura"
-        class="group flex min-w-0 flex-col overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm transition duration-300 hover:-translate-y-1 hover:border-blue-300 hover:shadow-xl md:rounded-2xl"
-      >
-        <div class="h-24 overflow-hidden bg-slate-100 sm:h-36 md:h-52">
-          <img
-            src="/images/categorii/aparatura-medicala-robena-trading.png"
-            alt="Aparatură medicală ROBENA TRADING"
-            class="h-full w-full object-cover transition duration-500 group-hover:scale-105"
-          />
-        </div>
-
-        <div class="flex flex-1 flex-col p-2 sm:p-3 md:p-6">
-          <h3 class="text-xs font-bold leading-tight text-slate-900 sm:text-base md:text-xl">
-            Aparatură medicală
-          </h3>
-
-          <p class="mt-2 hidden leading-7 text-slate-600 sm:block sm:text-sm md:text-base">
-            Aparatură și dispozitive pentru diagnosticare și monitorizare.
-          </p>
-
-          <span class="mt-auto inline-flex items-center gap-1 pt-3 text-[10px] font-semibold text-blue-700 sm:text-sm md:gap-2 md:pt-6 md:text-base">
-            Vezi produsele
-            <span class="transition group-hover:translate-x-1">→</span>
-          </span>
-        </div>
-      </a>
-
-      <!-- 5. Echipamente -->
-      <a
-        href="/produse/echipamente"
-        class="group flex min-w-0 flex-col overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm transition duration-300 hover:-translate-y-1 hover:border-blue-300 hover:shadow-xl md:rounded-2xl"
-      >
-        <div class="h-24 overflow-hidden bg-slate-100 sm:h-36 md:h-52">
-          <img
-            src="/images/categorii/echipamente-robena-trading.png"
-            alt="Echipamente ROBENA TRADING"
-            class="h-full w-full object-cover transition duration-500 group-hover:scale-105"
-          />
-        </div>
-
-        <div class="flex flex-1 flex-col p-2 sm:p-3 md:p-6">
-          <h3 class="text-xs font-bold leading-tight text-slate-900 sm:text-base md:text-xl">
-            Echipamente
-          </h3>
-
-          <p class="mt-2 hidden leading-7 text-slate-600 sm:block sm:text-sm md:text-base">
-            Cărucioare, tărgi și alte echipamente profesionale.
-          </p>
-
-          <span class="mt-auto inline-flex items-center gap-1 pt-3 text-[10px] font-semibold text-blue-700 sm:text-sm md:gap-2 md:pt-6 md:text-base">
-            Vezi produsele
-            <span class="transition group-hover:translate-x-1">→</span>
-          </span>
-        </div>
-      </a>
-
-      <!-- 6. Textile -->
-      <a
-        href="/produse/textile"
-        class="group flex min-w-0 flex-col overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm transition duration-300 hover:-translate-y-1 hover:border-blue-300 hover:shadow-xl md:rounded-2xl"
-      >
-        <div class="h-24 overflow-hidden bg-slate-100 sm:h-36 md:h-52">
-          <img
-            src="/images/categorii/textile-robena-trading.png"
-            alt="Textile ROBENA TRADING"
-            class="h-full w-full object-cover transition duration-500 group-hover:scale-105"
-          />
-        </div>
-
-        <div class="flex flex-1 flex-col p-2 sm:p-3 md:p-6">
-          <h3 class="text-xs font-bold leading-tight text-slate-900 sm:text-base md:text-xl">
-            Textile
-          </h3>
-
-          <p class="mt-2 hidden leading-7 text-slate-600 sm:block sm:text-sm md:text-base">
-            Lenjerii, saltele, perne, uniforme și produse textile.
-          </p>
-
-          <span class="mt-auto inline-flex items-center gap-1 pt-3 text-[10px] font-semibold text-blue-700 sm:text-sm md:gap-2 md:pt-6 md:text-base">
-            Vezi produsele
-            <span class="transition group-hover:translate-x-1">→</span>
-          </span>
-        </div>
-      </a>
-
-      <!-- 7. Consumabile -->
-      <a
-        href="/produse/consumabile"
-        class="group flex min-w-0 flex-col overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm transition duration-300 hover:-translate-y-1 hover:border-blue-300 hover:shadow-xl md:rounded-2xl"
-      >
-        <div class="h-24 overflow-hidden bg-slate-100 sm:h-36 md:h-52">
-          <img
-            src="/images/categorii/consumabile-robena-trading.png"
-            alt="Consumabile ROBENA TRADING"
-            class="h-full w-full object-cover transition duration-500 group-hover:scale-105"
-          />
-        </div>
-
-        <div class="flex flex-1 flex-col p-2 sm:p-3 md:p-6">
-          <h3 class="text-xs font-bold leading-tight text-slate-900 sm:text-base md:text-xl">
-            Consumabile
-          </h3>
-
-          <p class="mt-2 hidden leading-7 text-slate-600 sm:block sm:text-sm md:text-base">
-            Produse și accesorii pentru utilizare medicală și instituțională.
-          </p>
-
-          <span class="mt-auto inline-flex items-center gap-1 pt-3 text-[10px] font-semibold text-blue-700 sm:text-sm md:gap-2 md:pt-6 md:text-base">
-            Vezi produsele
-            <span class="transition group-hover:translate-x-1">→</span>
-          </span>
-        </div>
-      </a>
-
-      <!-- 8. Alte produse -->
-      <a
-        href="/produse/alte-produse"
-        class="group flex min-w-0 flex-col overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm transition duration-300 hover:-translate-y-1 hover:border-blue-300 hover:shadow-xl md:rounded-2xl"
-      >
-        <div class="h-24 overflow-hidden bg-slate-100 sm:h-36 md:h-52">
-          <img
-            src="/images/categorii/alte-produse-robena-trading.png"
-            alt="Alte produse ROBENA TRADING"
-            class="h-full w-full object-cover transition duration-500 group-hover:scale-105"
-          />
-        </div>
-
-        <div class="flex flex-1 flex-col p-2 sm:p-3 md:p-6">
-          <h3 class="text-xs font-bold leading-tight text-slate-900 sm:text-base md:text-xl">
-            Alte produse
-          </h3>
-
-          <p class="mt-2 hidden leading-7 text-slate-600 sm:block sm:text-sm md:text-base">
-            Diverse produse și soluții pentru instituții și persoane fizice.
-          </p>
-
-          <span class="mt-auto inline-flex items-center gap-1 pt-3 text-[10px] font-semibold text-blue-700 sm:text-sm md:gap-2 md:pt-6 md:text-base">
-            Vezi produsele
-            <span class="transition group-hover:translate-x-1">→</span>
-          </span>
-        </div>
-      </a>
-
-    </div>
-  </div>
-</section>
+      </section>
 
       <section id="despre" class="bg-slate-900 text-white">
         <div class="mx-auto max-w-7xl px-6 py-20">
-          <h2 class="text-3xl font-bold">Despre ROBENA TRADING</h2>
+          <h2 class="text-3xl font-bold">
+            Despre ROBENA TRADING
+          </h2>
 
           <p class="mt-6 max-w-3xl text-lg leading-8 text-slate-300">
             ROBENA TRADING furnizează produse și echipamente pentru instituții,
@@ -335,11 +163,11 @@ import Header from "../components/Header.astro";
 
     <footer id="contact" class="bg-white">
       <div class="mx-auto max-w-7xl px-6 py-12">
-<p class="mt-4 leading-8">
-  <strong>Telefon:</strong> 0740 413 699
-  <br />
-  <strong>Email:</strong> robena.trading@yahoo.com
-</p>
+        <p class="mt-4 leading-8">
+          <strong>Telefon:</strong> 0740 413 699
+          <br />
+          <strong>Email:</strong> robena.trading@yahoo.com
+        </p>
       </div>
     </footer>
   </body>

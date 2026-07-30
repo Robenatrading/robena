@@ -1,0 +1,125 @@
+---
+import "../styles/global.css";
+---
+
+<!doctype html>
+<html lang="ro">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0"
+    />
+
+    <title>Administrare produse | ROBENA TRADING</title>
+  </head>
+
+  <body class="min-h-screen bg-slate-100 text-slate-900">
+    <main class="mx-auto max-w-7xl px-6 py-10">
+      <div class="mb-8 flex items-center justify-between">
+        <div>
+          <h1 class="text-3xl font-bold">
+            Administrare produse
+          </h1>
+
+          <p class="mt-2 text-slate-600">
+            Gestionează produsele ROBENA TRADING.
+          </p>
+        </div>
+
+        <button
+          id="logout-button"
+          class="rounded-lg bg-slate-900 px-5 py-3 font-semibold text-white hover:bg-slate-700"
+        >
+          Deconectare
+        </button>
+      </div>
+
+      <section
+        id="loading"
+        class="rounded-xl bg-white p-6 shadow"
+      >
+        Se verifică autentificarea...
+      </section>
+
+      <section
+        id="admin-content"
+        class="hidden"
+      >
+        <div class="grid gap-6 md:grid-cols-3">
+          <article class="rounded-xl bg-white p-6 shadow">
+            <h2 class="text-xl font-bold">
+              Adaugă produs
+            </h2>
+
+            <p class="mt-2 text-slate-600">
+              Creează un produs nou în baza de date.
+            </p>
+
+            <button
+              class="mt-5 rounded-lg bg-blue-700 px-5 py-3 font-semibold text-white hover:bg-blue-800"
+            >
+              Adaugă produs
+            </button>
+          </article>
+
+          <article class="rounded-xl bg-white p-6 shadow">
+            <h2 class="text-xl font-bold">
+              Produse existente
+            </h2>
+
+            <p class="mt-2 text-slate-600">
+              Modifică sau șterge produsele existente.
+            </p>
+
+            <button
+              class="mt-5 rounded-lg bg-blue-700 px-5 py-3 font-semibold text-white hover:bg-blue-800"
+            >
+              Vezi produsele
+            </button>
+          </article>
+
+          <article class="rounded-xl bg-white p-6 shadow">
+            <h2 class="text-xl font-bold">
+              Categorii
+            </h2>
+
+            <p class="mt-2 text-slate-600">
+              Gestionează categoriile produselor.
+            </p>
+
+            <button
+              class="mt-5 rounded-lg bg-blue-700 px-5 py-3 font-semibold text-white hover:bg-blue-800"
+            >
+              Vezi categoriile
+            </button>
+          </article>
+        </div>
+      </section>
+    </main>
+
+    <script>
+      import { supabase } from "../lib/supabase.js";
+
+      const loading = document.querySelector("#loading");
+      const adminContent = document.querySelector("#admin-content");
+      const logoutButton = document.querySelector("#logout-button");
+
+      const {
+        data: { session },
+      } = await supabase.auth.getSession();
+
+      if (!session) {
+        window.location.href = "/admin";
+      } else {
+        loading.classList.add("hidden");
+        adminContent.classList.remove("hidden");
+      }
+
+      logoutButton.addEventListener("click", async () => {
+        await supabase.auth.signOut();
+        window.location.href = "/admin";
+      });
+    </script>
+  </body>
+</html>

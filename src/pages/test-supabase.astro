@@ -1,0 +1,27 @@
+---
+import "../styles/global.css";
+import { supabase } from "../lib/supabase";
+
+const { data: categorii, error } = await supabase
+  .from("categorii")
+  .select("*")
+  .order("ordine");
+---
+
+<!doctype html>
+<html lang="ro">
+<head>
+  <meta charset="UTF-8" />
+  <title>Test Supabase</title>
+</head>
+
+<body style="font-family: Arial; padding:40px">
+  <h1>Test Supabase</h1>
+
+  {error && (
+    <pre>{JSON.stringify(error, null, 2)}</pre>
+  )}
+
+  <pre>{JSON.stringify(categorii, null, 2)}</pre>
+</body>
+</html>
