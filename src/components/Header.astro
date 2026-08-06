@@ -1,7 +1,3 @@
----
-import { supabase } from "../lib/supabase.js";
----
-
 <header
   class="sticky top-0 z-50 border-b border-slate-200 bg-white/95 backdrop-blur"
 >
@@ -21,7 +17,7 @@ import { supabase } from "../lib/supabase.js";
       />
     </a>
 
-    <!-- Meniu desktop -->
+    <!-- Meniu -->
     <nav
       class="hidden items-center gap-8 text-sm font-semibold text-slate-700 md:flex"
     >
@@ -54,9 +50,12 @@ import { supabase } from "../lib/supabase.js";
           </svg>
         </a>
 
-        <!-- Lista categorii -->
+        <!-- Lista Produse -->
         <div
-          class="invisible absolute left-1/2 top-full z-[100] w-64 -translate-x-1/2 pt-2 opacity-0 transition-all duration-200 group-hover:visible group-hover:opacity-100"
+          class="invisible absolute left-1/2 top-full z-[100] w-64
+                 -translate-x-1/2 pt-2 opacity-0
+                 transition-all duration-200
+                 group-hover:visible group-hover:opacity-100"
         >
           <div
             class="rounded-2xl border border-slate-200 bg-white p-3 shadow-xl"
@@ -135,11 +134,10 @@ import { supabase } from "../lib/supabase.js";
       </a>
     </nav>
 
-    <!-- Căutare + buton ofertă -->
+    <!-- Lupă + buton ofertă -->
     <div class="flex items-center gap-3">
-      <!-- Buton lupă -->
       <button
-        id="deschide-cautare"
+        id="buton-cautare-produse"
         type="button"
         aria-label="Caută produse"
         aria-expanded="false"
@@ -151,6 +149,8 @@ import { supabase } from "../lib/supabase.js";
           fill="none"
           stroke="currentColor"
           stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
           aria-hidden="true"
         >
           <circle cx="11" cy="11" r="7"></circle>
@@ -158,7 +158,6 @@ import { supabase } from "../lib/supabase.js";
         </svg>
       </button>
 
-      <!-- Buton ofertă -->
       <a
         href="/contact/"
         class="rounded-lg bg-blue-700 px-4 py-3 text-sm font-semibold text-white transition hover:bg-blue-800 md:px-6 md:py-4"
@@ -168,9 +167,9 @@ import { supabase } from "../lib/supabase.js";
     </div>
   </div>
 
-  <!-- Panou căutare -->
+  <!-- Zona de căutare -->
   <div
-    id="panou-cautare"
+    id="panou-cautare-produse"
     class="hidden border-t border-slate-200 bg-white shadow-lg"
   >
     <div class="mx-auto max-w-3xl px-6 py-5">
@@ -181,6 +180,8 @@ import { supabase } from "../lib/supabase.js";
           fill="none"
           stroke="currentColor"
           stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
           aria-hidden="true"
         >
           <circle cx="11" cy="11" r="7"></circle>
@@ -188,18 +189,18 @@ import { supabase } from "../lib/supabase.js";
         </svg>
 
         <input
-          id="camp-cautare"
+          id="camp-cautare-produse"
           type="search"
           autocomplete="off"
-          placeholder="Scrie numele produsului..."
-          class="w-full rounded-xl border border-slate-300 py-4 pl-12 pr-12 text-base outline-none transition focus:border-blue-600 focus:ring-2 focus:ring-blue-100"
+          placeholder="Scrie unul sau mai multe cuvinte..."
+          class="w-full rounded-xl border border-slate-300 py-4 pl-12 pr-14 text-base outline-none transition focus:border-blue-600 focus:ring-2 focus:ring-blue-100"
         />
 
         <button
-          id="inchide-cautare"
+          id="inchide-cautare-produse"
           type="button"
           aria-label="Închide căutarea"
-          class="absolute right-3 top-1/2 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full text-slate-500 hover:bg-slate-100 hover:text-slate-900"
+          class="absolute right-3 top-1/2 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full text-slate-500 transition hover:bg-slate-100 hover:text-slate-900"
         >
           <svg
             class="h-5 w-5"
@@ -207,6 +208,7 @@ import { supabase } from "../lib/supabase.js";
             fill="none"
             stroke="currentColor"
             stroke-width="2"
+            stroke-linecap="round"
             aria-hidden="true"
           >
             <path d="M6 6l12 12"></path>
@@ -216,12 +218,12 @@ import { supabase } from "../lib/supabase.js";
       </div>
 
       <div
-        id="mesaj-cautare"
+        id="mesaj-cautare-produse"
         class="hidden py-5 text-center text-sm text-slate-500"
       ></div>
 
       <div
-        id="rezultate-cautare"
+        id="rezultate-cautare-produse"
         class="mt-3 hidden max-h-[420px] overflow-y-auto rounded-xl border border-slate-200 bg-white"
       ></div>
     </div>
@@ -231,25 +233,53 @@ import { supabase } from "../lib/supabase.js";
 <script>
   import { supabase } from "../lib/supabase.js";
 
-  const butonDeschidere =
-    document.querySelector("#deschide-cautare");
-
-  const butonInchidere =
-    document.querySelector("#inchide-cautare");
+  const butonCautare =
+    document.querySelector("#buton-cautare-produse");
 
   const panouCautare =
-    document.querySelector("#panou-cautare");
+    document.querySelector("#panou-cautare-produse");
 
   const campCautare =
-    document.querySelector("#camp-cautare");
+    document.querySelector("#camp-cautare-produse");
+
+  const inchideCautare =
+    document.querySelector("#inchide-cautare-produse");
 
   const rezultateCautare =
-    document.querySelector("#rezultate-cautare");
+    document.querySelector("#rezultate-cautare-produse");
 
   const mesajCautare =
-    document.querySelector("#mesaj-cautare");
+    document.querySelector("#mesaj-cautare-produse");
 
   let timerCautare;
+  let toateProdusele = null;
+
+  /*
+    Aceste cuvinte sunt ignorate la căutare.
+
+    Exemplu:
+    "pat de examinare"
+    devine:
+    ["pat", "examinare"]
+  */
+  const cuvinteIgnorate = new Set([
+    "de",
+    "din",
+    "pentru",
+    "cu",
+    "si",
+    "sau",
+    "la",
+    "in",
+    "pe",
+    "un",
+    "o",
+    "al",
+    "ale",
+    "a",
+    "lui",
+    "lor",
+  ]);
 
   function escapeHtml(value) {
     return String(value ?? "")
@@ -260,20 +290,158 @@ import { supabase } from "../lib/supabase.js";
       .replaceAll("'", "&#039;");
   }
 
-  function deschideCautarea() {
+  /*
+    Transformă:
+    "Masă medicală"
+    în:
+    "masa medicala"
+  */
+  function eliminaDiacritice(text) {
+    return String(text ?? "")
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "")
+      .toLowerCase()
+      .trim();
+  }
+
+  /*
+    Separă textul introdus în cuvinte individuale.
+
+    Exemplu:
+    "pat examinare medicala"
+    devine:
+    ["pat", "examinare", "medicala"]
+  */
+  function extrageCuvinteCautare(text) {
+    return eliminaDiacritice(text)
+      .split(/[^a-z0-9]+/)
+      .map((cuvant) => cuvant.trim())
+      .filter(
+        (cuvant) =>
+          cuvant.length >= 2 &&
+          !cuvinteIgnorate.has(cuvant)
+      );
+  }
+
+  /*
+    Verifică dacă un cuvânt introdus se potrivește
+    cu numele produsului.
+
+    Acceptă:
+    - cuvânt complet;
+    - început de cuvânt;
+    - fragment de minimum 3 litere.
+
+    Exemplu:
+    "exam"
+    găsește:
+    "examinare"
+  */
+  function cuvantSePotriveste(
+    cuvantCautat,
+    numeNormalizat
+  ) {
+    const cuvinteProdus =
+      numeNormalizat.split(/[^a-z0-9]+/);
+
+    return cuvinteProdus.some(
+      (cuvantProdus) => {
+        if (cuvantProdus === cuvantCautat) {
+          return true;
+        }
+
+        if (
+          cuvantProdus.startsWith(cuvantCautat)
+        ) {
+          return true;
+        }
+
+        if (
+          cuvantCautat.length >= 3 &&
+          cuvantProdus.includes(cuvantCautat)
+        ) {
+          return true;
+        }
+
+        return false;
+      }
+    );
+  }
+
+  /*
+    Calculează ordinea rezultatelor.
+
+    Produsele cu potriviri mai exacte
+    apar primele.
+  */
+  function calculeazaScor(
+    numeProdus,
+    cuvinteCautate
+  ) {
+    const numeNormalizat =
+      eliminaDiacritice(numeProdus);
+
+    const cuvinteProdus =
+      numeNormalizat.split(/[^a-z0-9]+/);
+
+    let scor = 0;
+
+    for (const cuvantCautat of cuvinteCautate) {
+      if (
+        cuvinteProdus.includes(cuvantCautat)
+      ) {
+        scor += 20;
+        continue;
+      }
+
+      if (
+        cuvinteProdus.some(
+          (cuvantProdus) =>
+            cuvantProdus.startsWith(
+              cuvantCautat
+            )
+        )
+      ) {
+        scor += 10;
+        continue;
+      }
+
+      if (
+        cuvantCautat.length >= 3 &&
+        numeNormalizat.includes(
+          cuvantCautat
+        )
+      ) {
+        scor += 5;
+      }
+    }
+
+    return scor;
+  }
+
+  function deschidePanoulCautare() {
     panouCautare.classList.remove("hidden");
-    butonDeschidere.setAttribute("aria-expanded", "true");
+
+    butonCautare.setAttribute(
+      "aria-expanded",
+      "true"
+    );
 
     setTimeout(() => {
       campCautare.focus();
     }, 50);
   }
 
-  function inchideCautarea() {
+  function inchidePanoulCautare() {
     panouCautare.classList.add("hidden");
-    butonDeschidere.setAttribute("aria-expanded", "false");
+
+    butonCautare.setAttribute(
+      "aria-expanded",
+      "false"
+    );
 
     campCautare.value = "";
+
     rezultateCautare.innerHTML = "";
     rezultateCautare.classList.add("hidden");
 
@@ -282,22 +450,29 @@ import { supabase } from "../lib/supabase.js";
   }
 
   function afiseazaMesaj(text) {
-    rezultateCautare.classList.add("hidden");
     rezultateCautare.innerHTML = "";
+    rezultateCautare.classList.add("hidden");
 
     mesajCautare.textContent = text;
     mesajCautare.classList.remove("hidden");
   }
 
   function afiseazaRezultate(produse) {
-    mesajCautare.classList.add("hidden");
     mesajCautare.textContent = "";
+    mesajCautare.classList.add("hidden");
 
     rezultateCautare.innerHTML = produse
       .map((produs) => {
-        const nume = escapeHtml(produs.nume);
-        const slug = encodeURIComponent(produs.slug ?? "");
-        const imagine = escapeHtml(produs.imagine ?? "");
+        const nume =
+          escapeHtml(produs.nume);
+
+        const imagine =
+          escapeHtml(produs.imagine ?? "");
+
+        const slug =
+          encodeURIComponent(
+            produs.slug ?? ""
+          );
 
         return `
           <a
@@ -338,33 +513,130 @@ import { supabase } from "../lib/supabase.js";
       })
       .join("");
 
-    rezultateCautare.classList.remove("hidden");
+    rezultateCautare.classList.remove(
+      "hidden"
+    );
+  }
+
+  async function incarcaToateProdusele() {
+    if (toateProdusele) {
+      return toateProdusele;
+    }
+
+    const { data: produse, error } =
+      await supabase
+        .from("produse")
+        .select(
+          "id, nume, slug, imagine"
+        )
+        .order("nume", {
+          ascending: true,
+        });
+
+    if (error) {
+      throw error;
+    }
+
+    toateProdusele = produse ?? [];
+
+    return toateProdusele;
   }
 
   async function cautaProduse(textCautat) {
-    const text = textCautat.trim();
+    const cuvinteCautate =
+      extrageCuvinteCautare(
+        textCautat
+      );
 
-    if (text.length < 2) {
+    if (cuvinteCautate.length === 0) {
       rezultateCautare.innerHTML = "";
-      rezultateCautare.classList.add("hidden");
+      rezultateCautare.classList.add(
+        "hidden"
+      );
 
       mesajCautare.textContent =
         "Scrie cel puțin două litere.";
-      mesajCautare.classList.remove("hidden");
+
+      mesajCautare.classList.remove(
+        "hidden"
+      );
 
       return;
     }
 
-    afiseazaMesaj("Se caută produsele...");
+    afiseazaMesaj(
+      "Se caută produsele..."
+    );
 
-    const { data: produse, error } = await supabase
-      .from("produse")
-      .select("id, nume, slug, imagine")
-      .ilike("nume", `%${text}%`)
-      .order("nume", { ascending: true })
-      .limit(10);
+    try {
+      const produse =
+        await incarcaToateProdusele();
 
-    if (error) {
+      const produseGasite = produse
+        .map((produs) => {
+          const numeNormalizat =
+            eliminaDiacritice(
+              produs.nume
+            );
+
+          /*
+            Toate cuvintele importante introduse
+            trebuie să existe în numele produsului.
+
+            Exemplu:
+            "pat examinare"
+            găsește:
+            "Pat de examinare medicală"
+          */
+          const toateCuvinteleSePotrivesc =
+            cuvinteCautate.every(
+              (cuvantCautat) =>
+                cuvantSePotriveste(
+                  cuvantCautat,
+                  numeNormalizat
+                )
+            );
+
+          return {
+            ...produs,
+            sePotriveste:
+              toateCuvinteleSePotrivesc,
+            scor: calculeazaScor(
+              produs.nume,
+              cuvinteCautate
+            ),
+          };
+        })
+        .filter(
+          (produs) =>
+            produs.sePotriveste
+        )
+        .sort((a, b) => {
+          if (b.scor !== a.scor) {
+            return b.scor - a.scor;
+          }
+
+          return a.nume.localeCompare(
+            b.nume,
+            "ro"
+          );
+        })
+        .slice(0, 10);
+
+      if (
+        produseGasite.length === 0
+      ) {
+        afiseazaMesaj(
+          "Nu a fost găsit niciun produs."
+        );
+
+        return;
+      }
+
+      afiseazaRezultate(
+        produseGasite
+      );
+    } catch (error) {
       console.error(
         "Eroare la căutarea produselor:",
         error
@@ -373,51 +645,57 @@ import { supabase } from "../lib/supabase.js";
       afiseazaMesaj(
         "Produsele nu au putut fi căutate."
       );
-
-      return;
     }
-
-    if (!produse || produse.length === 0) {
-      afiseazaMesaj(
-        "Nu a fost găsit niciun produs."
-      );
-
-      return;
-    }
-
-    afiseazaRezultate(produse);
   }
 
-  butonDeschidere.addEventListener("click", () => {
-    const esteDeschis =
-      !panouCautare.classList.contains("hidden");
-
-    if (esteDeschis) {
-      inchideCautarea();
-    } else {
-      deschideCautarea();
-    }
-  });
-
-  butonInchidere.addEventListener(
+  butonCautare.addEventListener(
     "click",
-    inchideCautarea
+    () => {
+      const esteDeschis =
+        !panouCautare.classList.contains(
+          "hidden"
+        );
+
+      if (esteDeschis) {
+        inchidePanoulCautare();
+      } else {
+        deschidePanoulCautare();
+      }
+    }
   );
 
-  campCautare.addEventListener("input", () => {
-    clearTimeout(timerCautare);
+  inchideCautare.addEventListener(
+    "click",
+    inchidePanoulCautare
+  );
 
-    timerCautare = setTimeout(() => {
-      cautaProduse(campCautare.value);
-    }, 250);
-  });
+  campCautare.addEventListener(
+    "input",
+    () => {
+      clearTimeout(timerCautare);
 
-  document.addEventListener("keydown", (event) => {
-    if (
-      event.key === "Escape" &&
-      !panouCautare.classList.contains("hidden")
-    ) {
-      inchideCautarea();
+      timerCautare = setTimeout(
+        () => {
+          cautaProduse(
+            campCautare.value
+          );
+        },
+        200
+      );
     }
-  });
+  );
+
+  document.addEventListener(
+    "keydown",
+    (event) => {
+      if (
+        event.key === "Escape" &&
+        !panouCautare.classList.contains(
+          "hidden"
+        )
+      ) {
+        inchidePanoulCautare();
+      }
+    }
+  );
 </script>
