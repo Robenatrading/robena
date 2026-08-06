@@ -21,7 +21,7 @@ import SeapSection from "../components/SeapSection.astro";
 
     <link rel="icon" type="image/png" href="/favicon.png?v=2" />
 
-    <title id="titlu-pagina">
+    <title>
       Produs | ROBENA TRADING
     </title>
   </head>
@@ -162,8 +162,8 @@ import SeapSection from "../components/SeapSection.astro";
       const params =
         new URLSearchParams(window.location.search);
 
-      const produsId =
-        Number(params.get("id"));
+      const produsSlug =
+        params.get("slug")?.trim() || "";
 
       function afiseazaEroare() {
         loadingProdus.classList.add("hidden");
@@ -172,7 +172,7 @@ import SeapSection from "../components/SeapSection.astro";
       }
 
       async function incarcaProdus() {
-        if (!produsId || Number.isNaN(produsId)) {
+        if (!produsSlug) {
           afiseazaEroare();
           return;
         }
@@ -188,7 +188,7 @@ import SeapSection from "../components/SeapSection.astro";
               imagine,
               categorie_id
             `)
-            .eq("id", produsId)
+            .eq("slug", produsSlug)
             .single();
 
         if (produsError || !produs) {
@@ -228,9 +228,7 @@ import SeapSection from "../components/SeapSection.astro";
           produs.descriere || "";
 
         imagineProdus.src =
-          produs.imagine
-            ? `${produs.imagine}?v=${Date.now()}`
-            : "";
+          produs.imagine || "";
 
         imagineProdus.alt =
           produs.nume || "Produs ROBENA TRADING";

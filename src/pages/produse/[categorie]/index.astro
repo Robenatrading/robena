@@ -74,7 +74,6 @@ const { categorie } = Astro.props;
         <div
           id="lista-produse"
           data-categorie-id={categorie.id}
-          data-categorie-slug={categorie.slug}
           class="mt-12 hidden grid gap-x-10 gap-y-14 sm:grid-cols-2 lg:grid-cols-3"
         ></div>
 
@@ -115,9 +114,6 @@ const { categorie } = Astro.props;
       const categorieId = Number(
         listaProduse.dataset.categorieId
       );
-
-      const categorieSlug =
-        listaProduse.dataset.categorieSlug;
 
       function escapeHtml(value) {
         return String(value ?? "")
@@ -161,13 +157,13 @@ const { categorie } = Astro.props;
                 produs.descriere
               );
 
-              const slugProdus = escapeHtml(
-                produs.slug
+              const slugProdus = encodeURIComponent(
+                produs.slug ?? ""
               );
 
               return `
                 <a
-href="/produs/?id=${produs.id}"
+                  href="/produs/?slug=${slugProdus}"
                   class="group block bg-transparent"
                 >
                   <div

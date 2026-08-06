@@ -6,19 +6,24 @@ import "../styles/global.css";
 <html lang="ro">
   <head>
     <meta charset="UTF-8" />
+
     <meta
       name="viewport"
       content="width=device-width, initial-scale=1.0"
     />
+
+    <link rel="icon" type="image/png" href="/favicon.png?v=2" />
 
     <title>Adaugă produs | ROBENA TRADING</title>
   </head>
 
   <body class="min-h-screen bg-slate-100 text-slate-900">
     <main class="mx-auto max-w-3xl px-6 py-10">
-      <div class="mb-8 flex items-center justify-between">
+      <div class="mb-8 flex items-center justify-between gap-6">
         <div>
-          <h1 class="text-3xl font-bold">Adaugă produs</h1>
+          <h1 class="text-3xl font-bold">
+            Adaugă produs
+          </h1>
 
           <p class="mt-2 text-slate-600">
             Completează datele produsului.
@@ -27,7 +32,7 @@ import "../styles/global.css";
 
         <a
           href="/admin-produse/"
-          class="rounded-lg bg-slate-900 px-5 py-3 font-semibold text-white hover:bg-slate-700"
+          class="shrink-0 rounded-lg bg-slate-900 px-5 py-3 font-semibold text-white transition hover:bg-slate-700"
         >
           Înapoi
         </a>
@@ -58,6 +63,7 @@ import "../styles/global.css";
               type="text"
               required
               class="w-full rounded-lg border border-slate-300 px-4 py-3 outline-none focus:border-blue-600"
+              placeholder="Exemplu: Folie stretch pentru ambalare"
             />
           </div>
 
@@ -66,19 +72,21 @@ import "../styles/global.css";
               for="slug"
               class="mb-2 block text-sm font-semibold"
             >
-              Slug
+              Link produs
             </label>
 
             <input
               id="slug"
               type="text"
               required
-              class="w-full rounded-lg border border-slate-300 px-4 py-3 outline-none focus:border-blue-600"
-              placeholder="carucior-medical-multifunctional"
+              readonly
+              class="w-full cursor-not-allowed rounded-lg border border-slate-300 bg-slate-100 px-4 py-3 text-slate-600 outline-none"
+              placeholder="Se generează din numele imaginii"
             />
 
             <p class="mt-2 text-sm text-slate-500">
-              Se generează automat din numele produsului.
+              Linkul se generează automat din numele fișierului imaginii,
+              fără extensia .png, .jpg sau .webp.
             </p>
           </div>
 
@@ -111,7 +119,9 @@ import "../styles/global.css";
               required
               class="w-full rounded-lg border border-slate-300 px-4 py-3 outline-none focus:border-blue-600"
             >
-              <option value="">Selectează categoria</option>
+              <option value="">
+                Selectează categoria
+              </option>
             </select>
           </div>
 
@@ -132,7 +142,8 @@ import "../styles/global.css";
             />
 
             <p class="mt-2 text-sm text-slate-500">
-              Formate acceptate: PNG, JPG și WEBP.
+              Redenumește imaginea înainte de încărcare. Exemplu:
+              folie-stretch-pentru-ambalare.png
             </p>
           </div>
 
@@ -157,7 +168,7 @@ import "../styles/global.css";
           <button
             id="submit-button"
             type="submit"
-            class="rounded-lg bg-blue-700 px-6 py-3 font-semibold text-white hover:bg-blue-800 disabled:cursor-not-allowed disabled:opacity-60"
+            class="rounded-lg bg-blue-700 px-6 py-3 font-semibold text-white transition hover:bg-blue-800 disabled:cursor-not-allowed disabled:opacity-60"
           >
             Salvează produsul
           </button>
@@ -173,15 +184,38 @@ import "../styles/global.css";
     <script>
       import { supabase } from "../lib/supabase.js";
 
-      const loading = document.querySelector("#loading");
-      const adminContent = document.querySelector("#admin-content");
-      const form = document.querySelector("#product-form");
-      const numeInput = document.querySelector("#nume");
-      const slugInput = document.querySelector("#slug");
-      const categorieSelect = document.querySelector("#categorie");
-      const imagineInput = document.querySelector("#imagine");
-      const submitButton = document.querySelector("#submit-button");
-      const message = document.querySelector("#message");
+      const loading =
+        document.querySelector("#loading");
+
+      const adminContent =
+        document.querySelector("#admin-content");
+
+      const form =
+        document.querySelector("#product-form");
+
+      const numeInput =
+        document.querySelector("#nume");
+
+      const slugInput =
+        document.querySelector("#slug");
+
+      const descriereInput =
+        document.querySelector("#descriere");
+
+      const categorieSelect =
+        document.querySelector("#categorie");
+
+      const imagineInput =
+        document.querySelector("#imagine");
+
+      const ordineInput =
+        document.querySelector("#ordine");
+
+      const submitButton =
+        document.querySelector("#submit-button");
+
+      const message =
+        document.querySelector("#message");
 
       function showMessage(text, type = "error") {
         message.textContent = text;
@@ -195,14 +229,20 @@ import "../styles/global.css";
         );
 
         if (type === "success") {
-          message.classList.add("bg-green-100", "text-green-700");
+          message.classList.add(
+            "bg-green-100",
+            "text-green-700"
+          );
         } else {
-          message.classList.add("bg-red-100", "text-red-700");
+          message.classList.add(
+            "bg-red-100",
+            "text-red-700"
+          );
         }
       }
 
       function createSlug(text) {
-        return text
+        return String(text ?? "")
           .normalize("NFD")
           .replace(/[\u0300-\u036f]/g, "")
           .toLowerCase()
@@ -211,8 +251,23 @@ import "../styles/global.css";
           .replace(/^-+|-+$/g, "");
       }
 
-      numeInput.addEventListener("input", () => {
-        slugInput.value = createSlug(numeInput.value);
+      function getSlugFromImage(file) {
+        if (!file) {
+          return "";
+        }
+
+        const numeFaraExtensie =
+          file.name.replace(/\.[^/.]+$/, "");
+
+        return createSlug(numeFaraExtensie);
+      }
+
+      imagineInput.addEventListener("change", () => {
+        const fisierImagine =
+          imagineInput.files?.[0];
+
+        slugInput.value =
+          getSlugFromImage(fisierImagine);
       });
 
       const {
@@ -226,11 +281,13 @@ import "../styles/global.css";
         adminContent.classList.remove("hidden");
       }
 
-      const { data: categorii, error: categoriiError } =
-        await supabase
-          .from("categorii")
-          .select("id, nume")
-          .order("id");
+      const {
+        data: categorii,
+        error: categoriiError,
+      } = await supabase
+        .from("categorii")
+        .select("id, nume")
+        .order("id", { ascending: true });
 
       if (categoriiError) {
         showMessage(
@@ -238,10 +295,16 @@ import "../styles/global.css";
             categoriiError.message
         );
       } else {
-        categorii.forEach((categorie) => {
-          const option = document.createElement("option");
-          option.value = categorie.id;
-          option.textContent = categorie.nume;
+        (categorii ?? []).forEach((categorie) => {
+          const option =
+            document.createElement("option");
+
+          option.value =
+            String(categorie.id);
+
+          option.textContent =
+            categorie.nume;
+
           categorieSelect.appendChild(option);
         });
       }
@@ -252,31 +315,106 @@ import "../styles/global.css";
         submitButton.disabled = true;
         submitButton.textContent = "Se salvează...";
 
-        const nume = numeInput.value.trim();
-        const slug = slugInput.value.trim();
-        const descriere = document
-          .querySelector("#descriere")
-          .value.trim();
+        const nume =
+          numeInput.value.trim();
 
-        const categorieId = Number(categorieSelect.value);
+        const descriere =
+          descriereInput.value.trim();
 
-        const ordine = Number(
-          document.querySelector("#ordine").value
-        );
+        const categorieId =
+          Number(categorieSelect.value);
 
-        const fisierImagine = imagineInput.files[0];
+        const ordine =
+          Number(ordineInput.value);
+
+        const fisierImagine =
+          imagineInput.files?.[0];
 
         if (!fisierImagine) {
-          showMessage("Selectează o imagine pentru produs.");
+          showMessage(
+            "Selectează o imagine pentru produs."
+          );
+
           submitButton.disabled = false;
-          submitButton.textContent = "Salvează produsul";
+          submitButton.textContent =
+            "Salvează produsul";
+
           return;
         }
 
-        const extensie = fisierImagine.name
-          .split(".")
-          .pop()
-          .toLowerCase();
+        const slug =
+          getSlugFromImage(fisierImagine);
+
+        slugInput.value = slug;
+
+        if (!slug) {
+          showMessage(
+            "Numele imaginii nu poate fi transformat într-un link valid."
+          );
+
+          submitButton.disabled = false;
+          submitButton.textContent =
+            "Salvează produsul";
+
+          return;
+        }
+
+        if (
+          !nume ||
+          !descriere ||
+          !categorieId ||
+          !ordine
+        ) {
+          showMessage(
+            "Completează toate câmpurile obligatorii."
+          );
+
+          submitButton.disabled = false;
+          submitButton.textContent =
+            "Salvează produsul";
+
+          return;
+        }
+
+        const {
+          data: produsExistent,
+          error: verificareSlugError,
+        } = await supabase
+          .from("produse")
+          .select("id")
+          .eq("slug", slug)
+          .maybeSingle();
+
+        if (verificareSlugError) {
+          showMessage(
+            "Linkul produsului nu a putut fi verificat: " +
+              verificareSlugError.message
+          );
+
+          submitButton.disabled = false;
+          submitButton.textContent =
+            "Salvează produsul";
+
+          return;
+        }
+
+        if (produsExistent) {
+          showMessage(
+            "Există deja un produs cu acest link. Redenumește imaginea și selecteaz-o din nou."
+          );
+
+          submitButton.disabled = false;
+          submitButton.textContent =
+            "Salvează produsul";
+
+          return;
+        }
+
+        const extensie =
+          fisierImagine.name
+            .split(".")
+            .pop()
+            .toLowerCase();
 
         const numeFisier =
           `${slug}-${Date.now()}.${extensie}`;
@@ -284,11 +422,16 @@ import "../styles/global.css";
         const { error: uploadError } =
           await supabase.storage
             .from("produse")
-            .upload(numeFisier, fisierImagine, {
-              cacheControl: "3600",
-              upsert: false,
-              contentType: fisierImagine.type,
-            });
+            .upload(
+              numeFisier,
+              fisierImagine,
+              {
+                cacheControl: "3600",
+                upsert: false,
+                contentType:
+                  fisierImagine.type,
+              }
+            );
 
         if (uploadError) {
           showMessage(
@@ -297,7 +440,9 @@ import "../styles/global.css";
           );
 
           submitButton.disabled = false;
-          submitButton.textContent = "Salvează produsul";
+          submitButton.textContent =
+            "Salvează produsul";
+
           return;
         }
 
@@ -331,7 +476,9 @@ import "../styles/global.css";
           );
 
           submitButton.disabled = false;
-          submitButton.textContent = "Salvează produsul";
+          submitButton.textContent =
+            "Salvează produsul";
+
           return;
         }
 
@@ -344,7 +491,8 @@ import "../styles/global.css";
         slugInput.value = "";
 
         submitButton.disabled = false;
-        submitButton.textContent = "Salvează produsul";
+        submitButton.textContent =
+          "Salvează produsul";
       });
     </script>
   </body>
