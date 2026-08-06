@@ -1,44 +1,417 @@
 ---
 import "../styles/global.css";
 import Header from "../components/Header.astro";
+import SeapSection from "../components/SeapSection.astro";
 ---
 
+<!doctype html>
 <html lang="ro">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Contact | ROBENA TRADING</title>
+
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0"
+    />
+
+    <meta
+      name="description"
+      content="Contactați ROBENA TRADING pentru informații despre produse și solicitări de ofertă."
+    />
+
+    <link rel="icon" type="image/png" href="/favicon.png?v=2" />
+
+    <title>Contact și solicitare ofertă | ROBENA TRADING</title>
   </head>
 
-<body class="bg-slate-50">
-  <Header />
+  <body class="bg-slate-50 text-slate-900">
+    <Header />
 
-  <main>
-      <div class="mx-auto max-w-5xl px-6 py-20">
-        <h1 class="text-center text-5xl font-bold text-slate-900">
-          Contact
-        </h1>
+    <main>
+      <section class="mx-auto max-w-7xl px-6 py-6 md:py-8">
+        <div class="mx-auto max-w-2xl">
+          <div class="mb-5 text-center">
+            <p
+              class="text-xs font-bold uppercase tracking-[0.18em] text-blue-700"
+            >
+              ROBENA TRADING
+            </p>
 
-        <div class="mt-16 rounded-3xl border border-slate-200 bg-white p-10 shadow">
-          <h2 class="text-2xl font-bold">
-            ROBENA TRADING
-          </h2>
+            <h1
+              class="mt-1 text-3xl font-bold tracking-tight text-slate-900 md:text-4xl"
+            >
+              Contact și solicitare ofertă
+            </h1>
 
-          <p class="mt-10 text-xl">
-            <strong>Telefon:</strong><br />
-            <a href="tel:+40740413699" class="text-blue-700 hover:underline">
-              0740 413 699
-            </a>
-          </p>
+            <p class="mt-2 text-sm leading-6 text-slate-600 md:text-base">
+              Completați formularul, iar solicitarea dumneavoastră va fi
+              transmisă către ROBENA TRADING.
+            </p>
+          </div>
 
-          <p class="mt-8 text-xl">
-            <strong>Email:</strong><br />
-            <a href="mailto:robena.trading@yahoo.com" class="text-blue-700 hover:underline">
-              robena.trading@yahoo.com
-            </a>
-          </p>
+<div class="mb-4 grid gap-3 md:grid-cols-2">
+  <div
+    class="flex items-center gap-3 rounded-xl border border-slate-200 bg-white p-4 shadow-sm"
+  >
+    <div
+      class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-blue-50 text-blue-700"
+    >
+      <svg
+        class="h-5 w-5"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        aria-hidden="true"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 0 0 2.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106a1.125 1.125 0 0 0-1.173.417l-.97 1.293a1.125 1.125 0 0 1-1.21.38 12.035 12.035 0 0 1-7.143-7.143 1.125 1.125 0 0 1 .38-1.21l1.293-.97c.36-.27.525-.735.417-1.173L6.963 3.102A1.125 1.125 0 0 0 5.872 2.25H4.5A2.25 2.25 0 0 0 2.25 4.5v2.25Z"
+        />
+      </svg>
+    </div>
+
+    <div>
+      <p class="text-xs font-semibold uppercase tracking-wide text-slate-500">
+        Telefon
+      </p>
+
+      <p class="mt-1 hidden font-bold text-slate-900 md:block">
+        0740 413 699
+      </p>
+
+      <a
+        href="tel:+40740413699"
+        class="mt-1 block font-bold text-blue-700 md:hidden"
+      >
+        0740 413 699
+      </a>
+    </div>
+  </div>
+
+  <div
+    class="flex items-center gap-3 rounded-xl border border-slate-200 bg-white p-4 shadow-sm"
+  >
+    <div
+      class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-blue-50 text-blue-700"
+    >
+      <svg
+        class="h-5 w-5"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        aria-hidden="true"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          d="M21.75 6.75v10.5A2.25 2.25 0 0 1 19.5 19.5h-15a2.25 2.25 0 0 1-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25m19.5 0-8.69 5.517a2.25 2.25 0 0 1-2.42 0L2.25 6.75"
+        />
+      </svg>
+    </div>
+
+    <div class="min-w-0">
+      <p class="text-xs font-semibold uppercase tracking-wide text-slate-500">
+        E-mail
+      </p>
+
+      <p class="mt-1 break-all font-bold text-slate-900">
+        robena.trading@yahoo.com
+      </p>
+    </div>
+  </div>
+</div>
+          <div class="rounded-2xl bg-white p-5 shadow-sm md:p-6">
+            <form
+              id="formular-contact"
+              class="space-y-3"
+            >
+              <input
+                id="produs-ascuns"
+                type="hidden"
+                name="produs"
+                value=""
+              />
+
+              <div>
+                <label
+                  for="firma"
+                  class="mb-1 block text-sm font-semibold text-slate-900"
+                >
+                  Instituție sau societate
+                </label>
+
+                <input
+                  id="firma"
+                  name="institutie"
+                  type="text"
+                  autocomplete="organization"
+                  placeholder="Denumirea instituției sau societății"
+                  class="w-full rounded-lg border border-slate-300 bg-white px-4 py-2 text-sm outline-none transition focus:border-blue-700 focus:ring-2 focus:ring-blue-100"
+                />
+              </div>
+
+              <div>
+                <label
+                  for="email"
+                  class="mb-1 block text-sm font-semibold text-slate-900"
+                >
+                  Adresa de e-mail *
+                </label>
+
+                <input
+                  id="email"
+                  name="email"
+                  type="email"
+                  required
+                  autocomplete="email"
+                  placeholder="exemplu@email.ro"
+                  class="w-full rounded-lg border border-slate-300 bg-white px-4 py-2 text-sm outline-none transition focus:border-blue-700 focus:ring-2 focus:ring-blue-100"
+                />
+              </div>
+
+              <div>
+                <label
+                  for="telefon"
+                  class="mb-1 block text-sm font-semibold text-slate-900"
+                >
+                  Telefon
+                </label>
+
+                <input
+                  id="telefon"
+                  name="telefon"
+                  type="tel"
+                  autocomplete="tel"
+                  placeholder="07xx xxx xxx"
+                  class="w-full rounded-lg border border-slate-300 bg-white px-4 py-2 text-sm outline-none transition focus:border-blue-700 focus:ring-2 focus:ring-blue-100"
+                />
+              </div>
+
+              <div>
+                <label
+                  for="mesaj"
+                  class="mb-1 block text-sm font-semibold text-slate-900"
+                >
+                  Descriere *
+                </label>
+
+                <textarea
+                  id="mesaj"
+                  name="descriere"
+                  required
+                  rows="4"
+                  placeholder="Descrieți produsul dorit, cantitatea, dimensiunile, configurația sau alte informații..."
+                  class="w-full resize-y rounded-lg border border-slate-300 bg-white px-4 py-2 text-sm outline-none transition focus:border-blue-700 focus:ring-2 focus:ring-blue-100"
+                ></textarea>
+              </div>
+
+              <label class="flex items-start gap-2 text-xs leading-5 text-slate-600">
+                <input
+                  id="acord"
+                  type="checkbox"
+                  required
+                  class="mt-0.5 h-4 w-4 rounded border-slate-300"
+                />
+
+                <span>
+                  Sunt de acord ca datele introduse să fie utilizate pentru
+                  preluarea și soluționarea solicitării mele.
+                </span>
+              </label>
+
+              <button
+                id="buton-trimitere"
+                type="submit"
+                class="inline-flex w-full items-center justify-center rounded-lg bg-blue-700 px-6 py-2.5 text-sm font-semibold text-white transition hover:bg-blue-800 disabled:cursor-not-allowed disabled:opacity-60 md:w-auto"
+              >
+                Trimite solicitarea
+              </button>
+
+              <p
+                id="mesaj-formular"
+                class="hidden rounded-lg px-4 py-2 text-sm font-semibold"
+                role="status"
+              ></p>
+            </form>
+          </div>
         </div>
-      </div>
+      </section>
+
+      <SeapSection />
     </main>
+
+    <script>
+      const ENDPOINT_SUPABASE =
+        "https://lagxckawyhfsmmfnnbcv.supabase.co/functions/v1/trimite-solicitare";
+
+      const params =
+        new URLSearchParams(window.location.search);
+
+      const produsDinLink =
+        params.get("produs")?.trim() || "";
+
+      const formular =
+        document.querySelector("#formular-contact");
+
+      const firmaInput =
+        document.querySelector("#firma");
+
+      const emailInput =
+        document.querySelector("#email");
+
+      const telefonInput =
+        document.querySelector("#telefon");
+
+      const mesajInput =
+        document.querySelector("#mesaj");
+
+      const produsAscuns =
+        document.querySelector("#produs-ascuns");
+
+      const butonTrimitere =
+        document.querySelector("#buton-trimitere");
+
+      const mesajFormular =
+        document.querySelector("#mesaj-formular");
+
+      if (
+        produsAscuns instanceof HTMLInputElement
+      ) {
+        produsAscuns.value = produsDinLink;
+      }
+
+      function afiseazaMesaj(
+        text,
+        tip
+      ) {
+        if (!(mesajFormular instanceof HTMLElement)) {
+          return;
+        }
+
+        mesajFormular.textContent = text;
+
+        mesajFormular.classList.remove(
+          "hidden",
+          "bg-green-50",
+          "text-green-700",
+          "bg-red-50",
+          "text-red-700"
+        );
+
+        if (tip === "succes") {
+          mesajFormular.classList.add(
+            "bg-green-50",
+            "text-green-700"
+          );
+        } else {
+          mesajFormular.classList.add(
+            "bg-red-50",
+            "text-red-700"
+          );
+        }
+      }
+
+      function ascundeMesaj() {
+        if (!(mesajFormular instanceof HTMLElement)) {
+          return;
+        }
+
+        mesajFormular.textContent = "";
+        mesajFormular.classList.add("hidden");
+
+        mesajFormular.classList.remove(
+          "bg-green-50",
+          "text-green-700",
+          "bg-red-50",
+          "text-red-700"
+        );
+      }
+
+      if (
+        formular instanceof HTMLFormElement &&
+        firmaInput instanceof HTMLInputElement &&
+        emailInput instanceof HTMLInputElement &&
+        telefonInput instanceof HTMLInputElement &&
+        mesajInput instanceof HTMLTextAreaElement &&
+        produsAscuns instanceof HTMLInputElement &&
+        butonTrimitere instanceof HTMLButtonElement
+      ) {
+        formular.addEventListener("submit", async (event) => {
+          event.preventDefault();
+
+          if (!formular.checkValidity()) {
+            formular.reportValidity();
+            return;
+          }
+
+          ascundeMesaj();
+
+          butonTrimitere.disabled = true;
+          butonTrimitere.textContent = "Se trimite...";
+
+          const dateFormular = {
+            institutie: firmaInput.value.trim(),
+            email: emailInput.value.trim(),
+            telefon: telefonInput.value.trim(),
+            descriere: mesajInput.value.trim(),
+            produs: produsAscuns.value.trim(),
+          };
+
+          try {
+            const raspuns = await fetch(ENDPOINT_SUPABASE, {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify(dateFormular),
+            });
+
+            const rezultat = await raspuns
+              .json()
+              .catch(() => null);
+
+            if (!raspuns.ok) {
+              console.error(
+                "Răspuns primit de la funcția Supabase:",
+                rezultat
+              );
+
+              throw new Error(
+                rezultat?.error ||
+                  "Solicitarea nu a putut fi trimisă."
+              );
+            }
+
+            formular.reset();
+
+            produsAscuns.value = produsDinLink;
+
+            afiseazaMesaj(
+              "Solicitarea a fost trimisă. Vă vom contacta în cel mai scurt timp.",
+              "succes"
+            );
+          } catch (eroare) {
+            console.error(
+              "Eroare la trimiterea formularului:",
+              eroare
+            );
+
+            afiseazaMesaj(
+              eroare instanceof Error
+                ? eroare.message
+                : "Solicitarea nu a putut fi trimisă. Încercați din nou.",
+              "eroare"
+            );
+          } finally {
+            butonTrimitere.disabled = false;
+            butonTrimitere.textContent =
+              "Trimite solicitarea";
+          }
+        });
+      }
+    </script>
   </body>
 </html>
