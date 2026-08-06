@@ -64,10 +64,9 @@ const { categorie } = Astro.props;
           </p>
         </div>
 
-
         <div
           id="eroare-produse"
-          class="mx-auto mt-12 hidden max-w-2xl rounded-2xl bg-red-50 p-10 text-center text-red-700 shadow-sm"
+          class="mx-auto mt-12 hidden max-w-2xl bg-transparent p-10 text-center text-red-700"
         >
           Produsele nu au putut fi încărcate.
         </div>
@@ -75,12 +74,13 @@ const { categorie } = Astro.props;
         <div
           id="lista-produse"
           data-categorie-id={categorie.id}
-          class="mt-12 hidden grid gap-8 sm:grid-cols-2 lg:grid-cols-3"
+          data-categorie-slug={categorie.slug}
+          class="mt-12 hidden grid gap-x-10 gap-y-14 sm:grid-cols-2 lg:grid-cols-3"
         ></div>
 
         <div
           id="fara-produse"
-          class="mx-auto mt-12 hidden max-w-2xl rounded-2xl bg-white p-10 text-center shadow-sm"
+          class="mx-auto mt-12 hidden max-w-2xl bg-transparent p-10 text-center"
         >
           <p class="text-lg font-semibold">
             Produsele din această categorie vor fi adăugate în curând.
@@ -103,7 +103,6 @@ const { categorie } = Astro.props;
     <script>
       import { supabase } from "../../../lib/supabase.js";
 
-
       const eroareProduse =
         document.querySelector("#eroare-produse");
 
@@ -116,6 +115,9 @@ const { categorie } = Astro.props;
       const categorieId = Number(
         listaProduse.dataset.categorieId
       );
+
+      const categorieSlug =
+        listaProduse.dataset.categorieSlug;
 
       function escapeHtml(value) {
         return String(value ?? "")
@@ -135,7 +137,6 @@ const { categorie } = Astro.props;
             )
             .eq("categorie_id", categorieId)
             .order("ordine", { ascending: true });
-
 
           if (error) {
             throw error;
@@ -160,22 +161,28 @@ const { categorie } = Astro.props;
                 produs.descriere
               );
 
+              const slugProdus = escapeHtml(
+                produs.slug
+              );
+
               return `
                 <a
-                  href="/produs/?id=${produs.id}"
-                  class="group overflow-hidden rounded-2xl bg-white shadow-sm transition hover:-translate-y-1 hover:shadow-lg"
+                  href="/produse/${categorieSlug}/${slugProdus}/"
+                  class="group block bg-transparent"
                 >
-                  <div class="flex h-72 items-center justify-center p-6">
+                  <div
+                    class="flex h-72 items-center justify-center bg-transparent p-4"
+                  >
                     <img
                       src="${imagine}"
                       alt="${nume}"
-                      class="h-full w-full object-contain transition duration-300 group-hover:scale-105"
+                      class="h-full w-full border-0 bg-transparent object-contain shadow-none transition duration-300 group-hover:scale-105"
                       loading="lazy"
                     />
                   </div>
 
-                  <div class="p-6 pt-0">
-                    <h2 class="text-xl font-bold">
+                  <div class="px-1 pt-5">
+                    <h2 class="text-xl font-bold text-slate-900">
                       ${nume}
                     </h2>
 
@@ -199,7 +206,6 @@ const { categorie } = Astro.props;
             error
           );
 
-          loadingProduse.classList.add("hidden");
           eroareProduse.classList.remove("hidden");
         }
       }
