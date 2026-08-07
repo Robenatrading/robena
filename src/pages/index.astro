@@ -1,6 +1,7 @@
 ---
 import "../styles/global.css";
 import Header from "../components/Header.astro";
+import SeapSection from "../components/SeapSection.astro";
 import { supabase } from "../lib/supabase.js";
 
 const { data: categorii, error } = await supabase
@@ -11,6 +12,40 @@ const { data: categorii, error } = await supabase
 if (error) {
   console.error("Eroare la încărcarea categoriilor:", error);
 }
+
+const siteUrl = "https://robena.ro";
+
+const seoTitle =
+  "ROBENA TRADING | Mobilier medical, metalic, textile și echipamente";
+
+const seoDescription =
+  "ROBENA TRADING furnizează mobilier medical, mobilier metalic, mobilier de birou, aparatură, echipamente, textile și consumabile pentru spitale, clinici, instituții publice, școli, companii și persoane fizice din România.";
+
+const organizationSchema = {
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  name: "ROBENA TRADING",
+  url: siteUrl,
+  logo: `${siteUrl}/images/logo-robena.png`,
+  description: seoDescription,
+  email: "robena.trading@yahoo.com",
+  telephone: "+40740413699",
+  contactPoint: {
+    "@type": "ContactPoint",
+    telephone: "+40740413699",
+    contactType: "sales",
+    areaServed: "RO",
+    availableLanguage: "Romanian",
+  },
+};
+
+const websiteSchema = {
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  name: "ROBENA TRADING",
+  url: siteUrl,
+  inLanguage: "ro-RO",
+};
 ---
 
 <!doctype html>
@@ -23,17 +58,101 @@ if (error) {
       content="width=device-width, initial-scale=1.0"
     />
 
+    <title>{seoTitle}</title>
+
     <meta
       name="description"
-      content="ROBENA TRADING – mobilier medical, mobilier metalic, textile și produse pentru instituții."
+      content={seoDescription}
     />
 
-    <link rel="icon" type="image/png" href="/favicon.png?v=2" />
+    <meta
+      name="robots"
+      content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"
+    />
 
-    <title>ROBENA TRADING | Mobilier medical și metalic</title>
+    <link rel="canonical" href={siteUrl} />
+
+    <link
+      rel="icon"
+      type="image/png"
+      href="/favicon.png?v=2"
+    />
+
+    <!-- Open Graph -->
+    <meta
+      property="og:type"
+      content="website"
+    />
+
+    <meta
+      property="og:locale"
+      content="ro_RO"
+    />
+
+    <meta
+      property="og:site_name"
+      content="ROBENA TRADING"
+    />
+
+    <meta
+      property="og:title"
+      content={seoTitle}
+    />
+
+    <meta
+      property="og:description"
+      content={seoDescription}
+    />
+
+    <meta
+      property="og:url"
+      content={siteUrl}
+    />
+
+    <meta
+      property="og:image"
+      content={`${siteUrl}/images/hero-robena-transparent.png`}
+    />
+
+    <meta
+      property="og:image:alt"
+      content="ROBENA TRADING - mobilier medical, mobilier metalic, textile și echipamente"
+    />
+
+    <!-- Twitter / Social -->
+    <meta
+      name="twitter:card"
+      content="summary_large_image"
+    />
+
+    <meta
+      name="twitter:title"
+      content={seoTitle}
+    />
+
+    <meta
+      name="twitter:description"
+      content={seoDescription}
+    />
+
+    <meta
+      name="twitter:image"
+      content={`${siteUrl}/images/hero-robena-transparent.png`}
+    />
+
+    <!-- Date structurate pentru Google și motoare AI -->
+    <script
+      type="application/ld+json"
+      set:html={JSON.stringify(organizationSchema)}
+    ></script>
+
+    <script
+      type="application/ld+json"
+      set:html={JSON.stringify(websiteSchema)}
+    ></script>
   </head>
 
-  <body>
+  <body class="min-h-screen bg-white text-slate-900">
     <Header />
 
     <main>
@@ -46,17 +165,17 @@ if (error) {
               <h1
                 class="max-w-3xl text-4xl font-bold leading-tight text-slate-900 md:text-6xl"
               >
-                Tot ce ai nevoie, într-un singur loc
+                Mobilier, echipamente și produse profesionale pentru instituții și companii
               </h1>
 
               <p
                 class="mt-4 max-w-2xl text-lg leading-relaxed text-slate-600 md:mt-6"
               >
-                Oferim mobilier medical și metalic, mobilier de birou,
-                echipamente, aparatură, textile, consumabile și numeroase alte
-                produse profesionale pentru spitale, clinici, instituții
-                publice, școli, companii, organizații și persoane fizice din
-                întreaga țară.
+                ROBENA TRADING oferă mobilier medical și metalic, mobilier
+                de birou, echipamente, aparatură, textile, consumabile și
+                numeroase alte produse profesionale pentru spitale, clinici,
+                instituții publice, școli, companii, organizații și persoane
+                fizice din întreaga țară.
               </p>
             </div>
 
@@ -80,8 +199,10 @@ if (error) {
           <div class="flex items-center justify-center">
             <img
               src="/images/hero-robena-transparent.png"
-              alt="Mobilier medical și produse ROBENA TRADING"
+              alt="Mobilier medical, mobilier metalic și produse profesionale ROBENA TRADING"
               class="w-full max-w-[700px] object-contain"
+              width="700"
+              height="700"
             />
           </div>
         </div>
@@ -116,7 +237,7 @@ if (error) {
                     <div class="h-24 overflow-hidden bg-slate-100 sm:h-36 md:h-52">
                       <img
                         src={categorie.imagine}
-                        alt={`${categorie.nume} ROBENA TRADING`}
+                        alt={`${categorie.nume} - ROBENA TRADING`}
                         class="h-full w-full object-cover transition duration-500 group-hover:scale-105"
                         loading="lazy"
                       />
@@ -158,20 +279,38 @@ if (error) {
           </h2>
 
           <p class="mt-6 max-w-3xl text-lg leading-8 text-slate-300">
-            ROBENA TRADING furnizează produse și echipamente pentru instituții,
-            cu accent pe mobilier medical, mobilier metalic, textile și soluții
-            adaptate cerințelor beneficiarilor.
+            ROBENA TRADING furnizează produse și echipamente pentru
+            instituții, companii și organizații din România, cu accent pe
+            mobilier medical, mobilier metalic, mobilier de birou,
+            aparatură, textile, consumabile și soluții adaptate cerințelor
+            beneficiarilor.
           </p>
         </div>
       </section>
+
+      <SeapSection />
     </main>
 
     <footer id="contact" class="bg-white">
       <div class="mx-auto max-w-7xl px-6 py-12">
-        <p class="mt-4 leading-8">
-          <strong>Telefon:</strong> 0740 413 699
+        <p class="leading-8">
+          <strong>Telefon:</strong>
+          <a
+            href="tel:+40740413699"
+            class="hover:text-blue-700"
+          >
+            0740 413 699
+          </a>
+
           <br />
-          <strong>Email:</strong> robena.trading@yahoo.com
+
+          <strong>Email:</strong>
+          <a
+            href="mailto:robena.trading@yahoo.com"
+            class="hover:text-blue-700"
+          >
+            robena.trading@yahoo.com
+          </a>
         </p>
       </div>
     </footer>
