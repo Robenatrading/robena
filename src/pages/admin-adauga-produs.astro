@@ -482,10 +482,31 @@ import "../styles/global.css";
           return;
         }
 
-        showMessage(
-          "Produsul și imaginea au fost adăugate cu succes.",
-          "success"
-        );
+        // Pornește automat rebuild-ul site-ului pe GitHub
+        const { error: deployError } =
+          await supabase.functions.invoke(
+            "trigger-deploy",
+            {
+              body: {},
+            }
+          );
+
+        if (deployError) {
+          console.error(
+            "Produsul a fost salvat, dar deploy-ul nu a pornit:",
+            deployError
+          );
+
+          showMessage(
+            "Produsul a fost adăugat în Supabase, dar actualizarea site-ului nu a putut fi pornită automat.",
+            "error"
+          );
+        } else {
+          showMessage(
+            "Produsul a fost adăugat cu succes. Site-ul se actualizează automat în câteva minute.",
+            "success"
+          );
+        }
 
         form.reset();
         slugInput.value = "";
