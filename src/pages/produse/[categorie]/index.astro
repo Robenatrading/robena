@@ -123,7 +123,6 @@ const itemListSchema = {
       href="/favicon.png?v=2"
     />
 
-    <!-- Open Graph -->
     <meta
       property="og:type"
       content="website"
@@ -167,7 +166,6 @@ const itemListSchema = {
       )
     }
 
-    <!-- Twitter -->
     <meta
       name="twitter:card"
       content="summary_large_image"
@@ -183,7 +181,6 @@ const itemListSchema = {
       content={seoDescription}
     />
 
-    <!-- Date structurate -->
     <script
       type="application/ld+json"
       set:html={JSON.stringify(categorySchema)}
@@ -238,70 +235,218 @@ const itemListSchema = {
         {
           produseError ? (
             <div
-              class="mx-auto mt-12 max-w-2xl bg-transparent p-10 text-center text-red-700"
+              id="eroare-produse"
+              class="mx-auto mt-12 max-w-2xl p-10 text-center text-red-700"
             >
               Produsele nu au putut fi încărcate.
             </div>
-          ) : produse && produse.length > 0 ? (
-            <div
-              class="mt-12 grid gap-x-10 gap-y-14 sm:grid-cols-2 lg:grid-cols-3"
-            >
-              {produse.map((produs) => (
-                <a
-                  href={`/produse/${categorie.slug}/${produs.slug}/`}
-                  class="group block bg-transparent"
-                >
-                  <div
-                    class="flex h-72 items-center justify-center bg-transparent p-4"
-                  >
-                    <img
-                      src={produs.imagine}
-                      alt={`${produs.nume} - ${categorie.nume} - ROBENA TRADING`}
-                      class="h-full w-full border-0 bg-transparent object-contain shadow-none transition duration-300 group-hover:scale-105"
-                      loading="lazy"
-                    />
-                  </div>
-
-                  <div class="px-1 pt-5">
-                    <h2 class="text-xl font-bold text-slate-900">
-                      {produs.nume}
-                    </h2>
-
-                    <p class="mt-3 line-clamp-3 leading-7 text-slate-600">
-                      {produs.descriere}
-                    </p>
-
-                    <span class="mt-5 inline-block font-semibold text-blue-700">
-                      Vezi produsul →
-                    </span>
-                  </div>
-                </a>
-              ))}
-            </div>
           ) : (
-            <div
-              class="mx-auto mt-12 max-w-2xl bg-transparent p-10 text-center"
-            >
-              <p class="text-lg font-semibold">
-                Produsele din această categorie vor fi adăugate în curând.
-              </p>
-
-              <p class="mt-3 text-slate-600">
-                Pentru informații și oferte personalizate, ne puteți contacta.
-              </p>
-
-              <a
-                href="/contact/"
-                class="mt-6 inline-flex rounded-xl bg-blue-700 px-6 py-3 font-semibold text-white transition hover:bg-blue-800"
+            <>
+              <div
+                id="lista-produse"
+                data-categorie-id={categorie.id}
+                data-categorie-slug={categorie.slug}
+                data-categorie-nume={categorie.nume}
+                class:list={[
+                  "mt-12 grid gap-x-10 gap-y-14 sm:grid-cols-2 lg:grid-cols-3",
+                  (!produse || produse.length === 0) && "hidden",
+                ]}
               >
-                Contactează-ne
-              </a>
-            </div>
+                {(produse ?? []).map((produs) => (
+                  <a
+                    href={`/produse/${categorie.slug}/${produs.slug}/`}
+                    class="group block bg-transparent"
+                  >
+                    <div
+                      class="flex h-72 items-center justify-center bg-transparent p-4"
+                    >
+                      <img
+                        src={produs.imagine}
+                        alt={`${produs.nume} - ${categorie.nume} - ROBENA TRADING`}
+                        class="h-full w-full border-0 bg-transparent object-contain shadow-none transition duration-300 group-hover:scale-105"
+                        loading="lazy"
+                      />
+                    </div>
+
+                    <div class="px-1 pt-5">
+                      <h2 class="text-xl font-bold text-slate-900">
+                        {produs.nume}
+                      </h2>
+
+                      <p class="mt-3 line-clamp-3 leading-7 text-slate-600">
+                        {produs.descriere}
+                      </p>
+
+                      <span class="mt-5 inline-block font-semibold text-blue-700">
+                        Vezi produsul →
+                      </span>
+                    </div>
+                  </a>
+                ))}
+              </div>
+
+              <div
+                id="fara-produse"
+                class:list={[
+                  "mx-auto mt-12 max-w-2xl p-10 text-center",
+                  produse && produse.length > 0 && "hidden",
+                ]}
+              >
+                <p class="text-lg font-semibold">
+                  Produsele din această categorie vor fi adăugate în curând.
+                </p>
+
+                <p class="mt-3 text-slate-600">
+                  Pentru informații și oferte personalizate, ne puteți contacta.
+                </p>
+
+                <a
+                  href="/contact/"
+                  class="mt-6 inline-flex rounded-xl bg-blue-700 px-6 py-3 font-semibold text-white transition hover:bg-blue-800"
+                >
+                  Contactează-ne
+                </a>
+              </div>
+            </>
           )
         }
       </section>
 
       <SeapSection />
     </main>
+
+    <script>
+      import { supabase } from "../../../lib/supabase.js";
+
+      const listaProduse =
+        document.querySelector("#lista-produse");
+
+      const faraProduse =
+        document.querySelector("#fara-produse");
+
+      if (listaProduse) {
+        const categorieId =
+          Number(listaProduse.dataset.categorieId);
+
+        const categorieSlug =
+          listaProduse.dataset.categorieSlug;
+
+        const categorieNume =
+          listaProduse.dataset.categorieNume;
+
+        function escapeHtml(value) {
+          return String(value ?? "")
+            .replaceAll("&", "&amp;")
+            .replaceAll("<", "&lt;")
+            .replaceAll(">", "&gt;")
+            .replaceAll('"', "&quot;")
+            .replaceAll("'", "&#039;");
+        }
+
+        async function actualizeazaProduseleLive() {
+          try {
+            const {
+              data: produseLive,
+              error,
+            } = await supabase
+              .from("produse")
+              .select(
+                "id, nume, slug, descriere, imagine, ordine"
+              )
+              .eq("categorie_id", categorieId)
+              .order("ordine", {
+                ascending: true,
+              });
+
+            if (error) {
+              console.error(
+                "Produsele live nu au putut fi încărcate:",
+                error
+              );
+
+              return;
+            }
+
+            if (
+              !produseLive ||
+              produseLive.length === 0
+            ) {
+              listaProduse.innerHTML = "";
+              listaProduse.classList.add("hidden");
+
+              if (faraProduse) {
+                faraProduse.classList.remove("hidden");
+              }
+
+              return;
+            }
+
+            if (faraProduse) {
+              faraProduse.classList.add("hidden");
+            }
+
+            listaProduse.innerHTML =
+              produseLive
+                .map((produs) => {
+                  const nume =
+                    escapeHtml(produs.nume);
+
+                  const descriere =
+                    escapeHtml(produs.descriere);
+
+                  const imagine =
+                    escapeHtml(produs.imagine);
+
+                  const slug =
+                    encodeURIComponent(
+                      produs.slug
+                    );
+
+                  return `
+                    <a
+                      href="/produse/${categorieSlug}/${slug}/"
+                      class="group block bg-transparent"
+                    >
+                      <div
+                        class="flex h-72 items-center justify-center bg-transparent p-4"
+                      >
+                        <img
+                          src="${imagine}"
+                          alt="${nume} - ${escapeHtml(categorieNume)} - ROBENA TRADING"
+                          class="h-full w-full border-0 bg-transparent object-contain shadow-none transition duration-300 group-hover:scale-105"
+                          loading="lazy"
+                        />
+                      </div>
+
+                      <div class="px-1 pt-5">
+                        <h2 class="text-xl font-bold text-slate-900">
+                          ${nume}
+                        </h2>
+
+                        <p class="mt-3 line-clamp-3 leading-7 text-slate-600">
+                          ${descriere}
+                        </p>
+
+                        <span class="mt-5 inline-block font-semibold text-blue-700">
+                          Vezi produsul →
+                        </span>
+                      </div>
+                    </a>
+                  `;
+                })
+                .join("");
+
+            listaProduse.classList.remove("hidden");
+          } catch (error) {
+            console.error(
+              "Eroare la actualizarea produselor:",
+              error
+            );
+          }
+        }
+
+        actualizeazaProduseleLive();
+      }
+    </script>
   </body>
 </html>
