@@ -77,12 +77,22 @@ const productSchema = {
   "@type": "Product",
   name: produs.nume,
   description: produs.descriere,
-  image: productImage,
+  image: [productImage],
   category: categorie.nume,
   url: productUrl,
+  sku: String(produs.id),
   brand: {
     "@type": "Brand",
     name: "ROBENA TRADING",
+  },
+  manufacturer: {
+    "@type": "Organization",
+    name: "ROBENA TRADING",
+    url: siteUrl,
+  },
+  mainEntityOfPage: {
+    "@type": "WebPage",
+    "@id": productUrl,
   },
 };
 
@@ -110,6 +120,24 @@ const breadcrumbSchema = {
     },
   ],
 };
+
+const webPageSchema = {
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  name: seoTitle,
+  description: seoDescription,
+  url: productUrl,
+  inLanguage: "ro-RO",
+  isPartOf: {
+    "@type": "WebSite",
+    name: "ROBENA TRADING",
+    url: siteUrl,
+  },
+  about: {
+    "@type": "Product",
+    name: produs.nume,
+  },
+};
 ---
 
 <!doctype html>
@@ -131,6 +159,11 @@ const breadcrumbSchema = {
 
     <meta
       name="robots"
+      content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"
+    />
+
+    <meta
+      name="googlebot"
       content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"
     />
 
@@ -183,10 +216,10 @@ const breadcrumbSchema = {
 
     <meta
       property="og:image:alt"
-      content={`${produs.nume} - ROBENA TRADING`}
+      content={`${produs.nume} - ${categorie.nume} - ROBENA TRADING`}
     />
 
-    <!-- Twitter -->
+    <!-- Social -->
     <meta
       name="twitter:card"
       content="summary_large_image"
@@ -207,16 +240,20 @@ const breadcrumbSchema = {
       content={productImage}
     />
 
-    <!-- Schema.org produs -->
+    <!-- Date structurate -->
     <script
       type="application/ld+json"
       set:html={JSON.stringify(productSchema)}
     ></script>
 
-    <!-- Schema.org breadcrumb -->
     <script
       type="application/ld+json"
       set:html={JSON.stringify(breadcrumbSchema)}
+    ></script>
+
+    <script
+      type="application/ld+json"
+      set:html={JSON.stringify(webPageSchema)}
     ></script>
   </head>
 

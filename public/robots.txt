@@ -14,4 +14,20 @@ Disallow: /admin-adauga-produs
 Disallow: /admin-lista-produse
 Disallow: /admin-editeaza-produs
 
+User-agent: Google-Extended
+Allow: /
+Disallow: /admin
+Disallow: /admin-produse
+Disallow: /admin-adauga-produs
+Disallow: /admin-lista-produse
+Disallow: /admin-editeaza-produs
+
+User-agent: PerplexityBot
+Allow: /
+Disallow: /admin
+Disallow: /admin-produse
+Disallow: /admin-adauga-produs
+Disallow: /admin-lista-produse
+Disallow: /admin-editeaza-produs
+
 Sitemap: https://robena.ro/sitemap-index.xml
