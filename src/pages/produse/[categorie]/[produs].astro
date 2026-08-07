@@ -75,6 +75,7 @@ const productImage =
 const productSchema = {
   "@context": "https://schema.org",
   "@type": "Product",
+  "@id": `${productUrl}#product`,
   name: produs.nume,
   description: produs.descriere,
   image: [productImage],
@@ -87,12 +88,12 @@ const productSchema = {
   },
   manufacturer: {
     "@type": "Organization",
+    "@id": `${siteUrl}/#organization`,
     name: "ROBENA TRADING",
     url: siteUrl,
   },
   mainEntityOfPage: {
-    "@type": "WebPage",
-    "@id": productUrl,
+    "@id": `${productUrl}#webpage`,
   },
 };
 
@@ -124,18 +125,19 @@ const breadcrumbSchema = {
 const webPageSchema = {
   "@context": "https://schema.org",
   "@type": "WebPage",
+  "@id": `${productUrl}#webpage`,
+  url: productUrl,
   name: seoTitle,
   description: seoDescription,
-  url: productUrl,
   inLanguage: "ro-RO",
   isPartOf: {
     "@type": "WebSite",
+    "@id": `${siteUrl}/#website`,
     name: "ROBENA TRADING",
     url: siteUrl,
   },
-  about: {
-    "@type": "Product",
-    name: produs.nume,
+  mainEntity: {
+    "@id": `${productUrl}#product`,
   },
 };
 ---

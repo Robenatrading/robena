@@ -24,28 +24,41 @@ const seoDescription =
 const organizationSchema = {
   "@context": "https://schema.org",
   "@type": "Organization",
+  "@id": `${siteUrl}/#organization`,
   name: "ROBENA TRADING",
   url: siteUrl,
-  logo: `${siteUrl}/images/logo-robena.png`,
+  logo: {
+    "@type": "ImageObject",
+    url: `${siteUrl}/images/logo-robena.png`,
+  },
   description: seoDescription,
   email: "robena.trading@yahoo.com",
   telephone: "+40740413699",
+  areaServed: {
+    "@type": "Country",
+    name: "România",
+  },
   contactPoint: {
     "@type": "ContactPoint",
     telephone: "+40740413699",
+    email: "robena.trading@yahoo.com",
     contactType: "sales",
     areaServed: "RO",
-    availableLanguage: "Romanian",
+    availableLanguage: ["Romanian"],
   },
 };
 
 const websiteSchema = {
   "@context": "https://schema.org",
   "@type": "WebSite",
+  "@id": `${siteUrl}/#website`,
   name: "ROBENA TRADING",
   url: siteUrl,
   description: seoDescription,
   inLanguage: "ro-RO",
+  publisher: {
+    "@id": `${siteUrl}/#organization`,
+  },
 };
 ---
 
