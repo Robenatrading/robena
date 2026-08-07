@@ -44,6 +44,7 @@ const websiteSchema = {
   "@type": "WebSite",
   name: "ROBENA TRADING",
   url: siteUrl,
+  description: seoDescription,
   inLanguage: "ro-RO",
 };
 ---
@@ -70,7 +71,10 @@ const websiteSchema = {
       content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"
     />
 
-    <link rel="canonical" href={siteUrl} />
+    <link
+      rel="canonical"
+      href={siteUrl}
+    />
 
     <link
       rel="icon"
@@ -163,19 +167,26 @@ const websiteSchema = {
           <div class="flex flex-col gap-8 md:block">
             <div>
               <h1
-                class="max-w-3xl text-4xl font-bold leading-tight text-slate-900 md:text-6xl"
+                class="text-3xl font-bold leading-tight tracking-tight text-slate-900 md:text-4xl lg:whitespace-nowrap"
               >
-                Mobilier, echipamente și produse profesionale pentru instituții și companii
+                Tot ce ai nevoie într-un singur loc
               </h1>
 
-              <p
-                class="mt-4 max-w-2xl text-lg leading-relaxed text-slate-600 md:mt-6"
+              <h2
+                class="mt-6 max-w-2xl text-xl font-bold leading-snug text-slate-900 md:text-2xl"
               >
-                ROBENA TRADING oferă mobilier medical și metalic, mobilier
-                de birou, echipamente, aparatură, textile, consumabile și
-                numeroase alte produse profesionale pentru spitale, clinici,
-                instituții publice, școli, companii, organizații și persoane
-                fizice din întreaga țară.
+                Mobilier, echipamente și produse profesionale pentru instituții și companii
+              </h2>
+
+              <p
+                class="mt-4 max-w-2xl text-lg leading-relaxed text-slate-600"
+              >
+                ROBENA TRADING oferă mobilier medical și metalic,
+                mobilier de birou, echipamente, aparatură, textile,
+                consumabile și numeroase alte produse profesionale
+                pentru spitale, clinici, instituții publice, școli,
+                companii, organizații și persoane fizice din întreaga
+                țară.
               </p>
             </div>
 
@@ -208,8 +219,13 @@ const websiteSchema = {
         </div>
       </section>
 
-      <section id="produse" class="bg-white">
-        <div class="mx-auto max-w-7xl px-2 py-12 sm:px-4 md:px-6 md:py-20">
+      <section
+        id="produse"
+        class="bg-white"
+      >
+        <div
+          class="mx-auto max-w-7xl px-2 py-12 sm:px-4 md:px-6 md:py-20"
+        >
           <div class="mx-auto max-w-3xl text-center">
             <h2
               class="text-3xl font-bold leading-tight text-slate-900 md:text-5xl"
@@ -272,7 +288,10 @@ const websiteSchema = {
         </div>
       </section>
 
-      <section id="despre" class="bg-slate-900 text-white">
+      <section
+        id="despre"
+        class="bg-slate-900 text-white"
+      >
         <div class="mx-auto max-w-7xl px-6 py-20">
           <h2 class="text-3xl font-bold">
             Despre ROBENA TRADING
@@ -280,10 +299,10 @@ const websiteSchema = {
 
           <p class="mt-6 max-w-3xl text-lg leading-8 text-slate-300">
             ROBENA TRADING furnizează produse și echipamente pentru
-            instituții, companii și organizații din România, cu accent pe
-            mobilier medical, mobilier metalic, mobilier de birou,
-            aparatură, textile, consumabile și soluții adaptate cerințelor
-            beneficiarilor.
+            instituții, companii și organizații din România, cu accent
+            pe mobilier medical, mobilier metalic, mobilier de birou,
+            aparatură, textile, consumabile și soluții adaptate
+            cerințelor beneficiarilor.
           </p>
         </div>
       </section>
@@ -291,10 +310,14 @@ const websiteSchema = {
       <SeapSection />
     </main>
 
-    <footer id="contact" class="bg-white">
+    <footer
+      id="contact"
+      class="bg-white"
+    >
       <div class="mx-auto max-w-7xl px-6 py-12">
         <p class="leading-8">
           <strong>Telefon:</strong>
+
           <a
             href="tel:+40740413699"
             class="hover:text-blue-700"
@@ -305,6 +328,7 @@ const websiteSchema = {
           <br />
 
           <strong>Email:</strong>
+
           <a
             href="mailto:robena.trading@yahoo.com"
             class="hover:text-blue-700"
