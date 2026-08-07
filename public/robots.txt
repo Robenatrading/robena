@@ -1,0 +1,17 @@
+User-agent: *
+Allow: /
+Disallow: /admin
+Disallow: /admin-produse
+Disallow: /admin-adauga-produs
+Disallow: /admin-lista-produse
+Disallow: /admin-editeaza-produs
+
+User-agent: OAI-SearchBot
+Allow: /
+Disallow: /admin
+Disallow: /admin-produse
+Disallow: /admin-adauga-produs
+Disallow: /admin-lista-produse
+Disallow: /admin-editeaza-produs
+
+Sitemap: https://robena.ro/sitemap-index.xml
