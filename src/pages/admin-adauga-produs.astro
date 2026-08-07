@@ -262,6 +262,49 @@ import "../styles/global.css";
         return createSlug(numeFaraExtensie);
       }
 
+      function asteapta(ms) {
+        return new Promise((resolve) => {
+          setTimeout(resolve, ms);
+        });
+      }
+
+      async function pornesteDeploy(session) {
+        if (!session?.access_token) {
+          throw new Error(
+            "Sesiunea de autentificare nu este disponibilă."
+          );
+        }
+
+        const { data, error } =
+          await supabase.functions.invoke(
+            "trigger-deploy",
+            {
+              body: {
+                action: "add-product",
+                source: "admin-adauga-produs",
+                timestamp: new Date().toISOString(),
+              },
+              headers: {
+                Authorization:
+                  `Bearer ${session.access_token}`,
+              },
+            }
+          );
+
+        if (error) {
+          throw error;
+        }
+
+        if (data?.success === false) {
+          throw new Error(
+            data?.message ||
+              "GitHub nu a confirmat pornirea deployment-ului."
+          );
+        }
+
+        return data;
+      }
+
       imagineInput.addEventListener("change", () => {
         const fisierImagine =
           imagineInput.files?.[0];
@@ -460,10 +503,14 @@ import "../styles/global.css";
           ordine,
         };
 
-        const { error: insertError } =
-          await supabase
-            .from("produse")
-            .insert(produs);
+        const {
+          data: produsSalvat,
+          error: insertError,
+        } = await supabase
+          .from("produse")
+          .insert(produs)
+          .select("id, slug, categorie_id")
+          .single();
 
         if (insertError) {
           await supabase.storage
@@ -482,29 +529,70 @@ import "../styles/global.css";
           return;
         }
 
-        // Pornește automat rebuild-ul site-ului pe GitHub
-        const { error: deployError } =
-          await supabase.functions.invoke(
-            "trigger-deploy",
-            {
-              body: {},
-            }
+        /*
+         * Verificăm că produsul poate fi citit din Supabase
+         * înainte să pornim build-ul Astro.
+         */
+        let produsConfirmat = false;
+
+        for (let incercare = 0; incercare < 5; incercare++) {
+          const {
+            data: verificareProdus,
+            error: verificareProdusError,
+          } = await supabase
+            .from("produse")
+            .select("id")
+            .eq("id", produsSalvat.id)
+            .maybeSingle();
+
+          if (
+            !verificareProdusError &&
+            verificareProdus
+          ) {
+            produsConfirmat = true;
+            break;
+          }
+
+          await asteapta(500);
+        }
+
+        if (!produsConfirmat) {
+          console.warn(
+            "Produsul a fost salvat, dar nu a putut fi reconfirmat înainte de deploy."
+          );
+        }
+
+        /*
+         * Mică pauză înainte de GitHub build.
+         * Astfel ne asigurăm că build-ul citește produsul nou.
+         */
+        await asteapta(1000);
+
+        submitButton.textContent =
+          "Se actualizează site-ul...";
+
+        try {
+          const rezultatDeploy =
+            await pornesteDeploy(session);
+
+          console.log(
+            "Deployment GitHub pornit:",
+            rezultatDeploy
           );
 
-        if (deployError) {
+          showMessage(
+            "Produsul a fost adăugat cu succes. Actualizarea site-ului a fost pornită automat. Pagina produsului va fi disponibilă în aproximativ 1 minut.",
+            "success"
+          );
+        } catch (deployError) {
           console.error(
             "Produsul a fost salvat, dar deploy-ul nu a pornit:",
             deployError
           );
 
           showMessage(
-            "Produsul a fost adăugat în Supabase, dar actualizarea site-ului nu a putut fi pornită automat.",
+            "Produsul a fost adăugat în Supabase, dar actualizarea automată a site-ului nu a pornit. Verifică funcția trigger-deploy.",
             "error"
-          );
-        } else {
-          showMessage(
-            "Produsul a fost adăugat cu succes. Site-ul se actualizează automat în câteva minute.",
-            "success"
           );
         }
 
