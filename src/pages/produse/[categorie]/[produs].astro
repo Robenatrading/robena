@@ -72,31 +72,6 @@ const productImage =
     ? produs.imagine
     : `${siteUrl}${produs.imagine}`;
 
-const productSchema = {
-  "@context": "https://schema.org",
-  "@type": "Product",
-  "@id": `${productUrl}#product`,
-  name: produs.nume,
-  description: produs.descriere,
-  image: [productImage],
-  category: categorie.nume,
-  url: productUrl,
-  sku: String(produs.id),
-  brand: {
-    "@type": "Brand",
-    name: "ROBENA TRADING",
-  },
-  manufacturer: {
-    "@type": "Organization",
-    "@id": `${siteUrl}/#organization`,
-    name: "ROBENA TRADING",
-    url: siteUrl,
-  },
-  mainEntityOfPage: {
-    "@id": `${productUrl}#webpage`,
-  },
-};
-
 const breadcrumbSchema = {
   "@context": "https://schema.org",
   "@type": "BreadcrumbList",
@@ -135,9 +110,6 @@ const webPageSchema = {
     "@id": `${siteUrl}/#website`,
     name: "ROBENA TRADING",
     url: siteUrl,
-  },
-  mainEntity: {
-    "@id": `${productUrl}#product`,
   },
 };
 ---
@@ -183,7 +155,7 @@ const webPageSchema = {
     <!-- Open Graph -->
     <meta
       property="og:type"
-      content="product"
+      content="website"
     />
 
     <meta
@@ -243,11 +215,6 @@ const webPageSchema = {
     />
 
     <!-- Date structurate -->
-    <script
-      type="application/ld+json"
-      set:html={JSON.stringify(productSchema)}
-    ></script>
-
     <script
       type="application/ld+json"
       set:html={JSON.stringify(breadcrumbSchema)}
