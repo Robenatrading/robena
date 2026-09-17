@@ -72,6 +72,11 @@ const productImage =
     ? produs.imagine
     : `${siteUrl}${produs.imagine}`;
 
+
+/* =========================================================
+   DATE STRUCTURATE - BREADCRUMBS
+   ========================================================= */
+
 const breadcrumbSchema = {
   "@context": "https://schema.org",
   "@type": "BreadcrumbList",
@@ -97,6 +102,11 @@ const breadcrumbSchema = {
   ],
 };
 
+
+/* =========================================================
+   DATE STRUCTURATE - PAGINA WEB
+   ========================================================= */
+
 const webPageSchema = {
   "@context": "https://schema.org",
   "@type": "WebPage",
@@ -112,11 +122,34 @@ const webPageSchema = {
     url: siteUrl,
   },
 };
+
+
+/* =========================================================
+   DATE STRUCTURATE - PRODUS
+   ========================================================= */
+
+const productSchema = {
+  "@context": "https://schema.org",
+  "@type": "Product",
+  "@id": `${productUrl}#product`,
+  name: produs.nume,
+  description: produs.descriere,
+  image: productImage,
+  url: productUrl,
+  brand: {
+    "@type": "Brand",
+    name: "ROBENA TRADING",
+  },
+  category: categorie.nume,
+};
 ---
 
 <!doctype html>
+
 <html lang="ro">
+
   <head>
+
     <meta charset="UTF-8" />
 
     <meta
@@ -152,7 +185,11 @@ const webPageSchema = {
       href="/favicon.png?v=2"
     />
 
-    <!-- Open Graph -->
+
+    <!-- =====================================================
+         OPEN GRAPH
+         ===================================================== -->
+
     <meta
       property="og:type"
       content="website"
@@ -193,7 +230,11 @@ const webPageSchema = {
       content={`${produs.nume} - ${categorie.nume} - ROBENA TRADING`}
     />
 
-    <!-- Social -->
+
+    <!-- =====================================================
+         TWITTER / SOCIAL
+         ===================================================== -->
+
     <meta
       name="twitter:card"
       content="summary_large_image"
@@ -214,27 +255,53 @@ const webPageSchema = {
       content={productImage}
     />
 
-    <!-- Date structurate -->
+
+    <!-- =====================================================
+         DATE STRUCTURATE JSON-LD
+         ===================================================== -->
+
+    <!-- Breadcrumbs -->
+
     <script
       type="application/ld+json"
       set:html={JSON.stringify(breadcrumbSchema)}
     ></script>
 
+
+    <!-- WebPage -->
+
     <script
       type="application/ld+json"
       set:html={JSON.stringify(webPageSchema)}
     ></script>
+
+
+    <!-- Product -->
+
+    <script
+      type="application/ld+json"
+      set:html={JSON.stringify(productSchema)}
+    ></script>
+
   </head>
 
+
   <body class="min-h-screen bg-white text-slate-900">
+
     <Header />
 
+
     <main>
+
       <section class="mx-auto max-w-7xl px-6 py-12">
+
+        <!-- Breadcrumb vizibil -->
+
         <nav
           class="mb-8 text-sm text-slate-600"
           aria-label="Navigare"
         >
+
           <a
             href="/"
             class="transition hover:text-blue-700"
@@ -256,19 +323,32 @@ const webPageSchema = {
           <span class="font-semibold text-slate-900">
             {produs.nume}
           </span>
+
         </nav>
 
+
+        <!-- Produs -->
+
         <div class="grid items-center gap-12 lg:grid-cols-2">
+
+          <!-- Imagine produs -->
+
           <div class="flex min-h-[420px] items-center justify-center">
+
             <img
               src={produs.imagine}
               alt={`${produs.nume} - ${categorie.nume} - ROBENA TRADING`}
               class="max-h-[520px] w-full object-contain"
               loading="eager"
             />
+
           </div>
 
+
+          <!-- Informații produs -->
+
           <div>
+
             <p class="font-semibold text-blue-700">
               {categorie.nume}
             </p>
@@ -289,11 +369,18 @@ const webPageSchema = {
             >
               Solicită ofertă
             </a>
+
           </div>
+
         </div>
+
       </section>
 
+
       <SeapSection />
+
     </main>
+
   </body>
+
 </html>
