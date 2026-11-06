@@ -2,7 +2,9 @@
 import "../styles/global.css";
 import Header from "../components/Header.astro";
 import SeapSection from "../components/SeapSection.astro";
+import Footer from "../components/Footer.astro";
 import { supabase } from "../lib/supabase.js";
+import { organizationSchema as creeazaOrganizationSchema } from "../lib/firma.js";
 
 const { data: categorii, error } = await supabase
   .from("categorii")
@@ -21,32 +23,7 @@ const seoTitle =
 const seoDescription =
   "ROBENA TRADING furnizează mobilier medical, mobilier metalic, mobilier de birou, aparatură, echipamente, textile și consumabile pentru spitale, clinici, instituții publice, școli, companii și persoane fizice din România.";
 
-const organizationSchema = {
-  "@context": "https://schema.org",
-  "@type": "Organization",
-  "@id": `${siteUrl}/#organization`,
-  name: "ROBENA TRADING",
-  url: siteUrl,
-  logo: {
-    "@type": "ImageObject",
-    url: `${siteUrl}/images/logo-robena.png`,
-  },
-  description: seoDescription,
-  email: "robena.trading@yahoo.com",
-  telephone: "+40740413699",
-  areaServed: {
-    "@type": "Country",
-    name: "România",
-  },
-  contactPoint: {
-    "@type": "ContactPoint",
-    telephone: "+40740413699",
-    email: "robena.trading@yahoo.com",
-    contactType: "sales",
-    areaServed: "RO",
-    availableLanguage: ["Romanian"],
-  },
-};
+const organizationSchema = creeazaOrganizationSchema(siteUrl, seoDescription);
 
 const websiteSchema = {
   "@context": "https://schema.org",
@@ -86,7 +63,7 @@ const websiteSchema = {
 
     <link
       rel="canonical"
-      href={siteUrl}
+      href={`${siteUrl}/`}
     />
 
     <link
@@ -123,7 +100,7 @@ const websiteSchema = {
 
     <meta
       property="og:url"
-      content={siteUrl}
+      content={`${siteUrl}/`}
     />
 
     <meta
@@ -179,7 +156,9 @@ const websiteSchema = {
         >
           <div class="flex flex-col gap-8 md:block">
             <div>
-              <h1
+              <!-- Sloganul rămâne la fel vizual; H1 conține acum
+                   cuvintele după care caută clienții în Google. -->
+              <p
                 class="text-5xl font-bold leading-tight tracking-tight text-slate-900 md:text-6xl"
               >
                 <span class="block">
@@ -189,13 +168,13 @@ const websiteSchema = {
                 <span class="block">
                   într-un singur loc
                 </span>
-              </h1>
+              </p>
 
-              <h2
+              <h1
                 class="mt-6 max-w-2xl text-xl font-bold leading-snug text-slate-900 md:text-2xl"
               >
-                Mobilier, echipamente și produse profesionale pentru instituții și companii
-              </h2>
+                Mobilier medical, mobilier metalic, echipamente și textile pentru spitale, instituții și companii
+              </h1>
 
               <p
                 class="mt-4 max-w-2xl text-lg leading-relaxed text-slate-600"
@@ -329,33 +308,6 @@ const websiteSchema = {
       <SeapSection />
     </main>
 
-    <footer
-      id="contact"
-      class="bg-white"
-    >
-      <div class="mx-auto max-w-7xl px-6 py-12">
-        <p class="leading-8">
-          <strong>Telefon:</strong>
-
-          <a
-            href="tel:+40740413699"
-            class="hover:text-blue-700"
-          >
-            0740 413 699
-          </a>
-
-          <br />
-
-          <strong>Email:</strong>
-
-          <a
-            href="mailto:robena.trading@yahoo.com"
-            class="hover:text-blue-700"
-          >
-            robena.trading@yahoo.com
-          </a>
-        </p>
-      </div>
-    </footer>
+    <Footer />
   </body>
 </html>

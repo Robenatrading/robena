@@ -2,6 +2,7 @@
 import "../styles/global.css";
 import Header from "../components/Header.astro";
 import SeapSection from "../components/SeapSection.astro";
+import Footer from "../components/Footer.astro";
 ---
 
 <!doctype html>
@@ -16,10 +17,19 @@ import SeapSection from "../components/SeapSection.astro";
 
     <meta
       name="description"
-      content="Contactați ROBENA TRADING pentru informații despre produse și solicitări de ofertă."
+      content="Solicitați ofertă de la ROBENA TRADING pentru mobilier medical și metalic, aparatură, echipamente, textile și consumabile. Telefon 0740 413 699."
     />
 
     <link rel="icon" type="image/png" href="/favicon.png?v=2" />
+
+    <link rel="canonical" href="https://robena.ro/contact/" />
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="ro_RO" />
+    <meta property="og:site_name" content="ROBENA TRADING" />
+    <meta property="og:title" content="Contact și solicitare ofertă | ROBENA TRADING" />
+    <meta property="og:description" content="Solicitați ofertă pentru mobilier medical, mobilier metalic, aparatură, echipamente, textile și consumabile. Telefon 0740 413 699." />
+    <meta property="og:url" content="https://robena.ro/contact/" />
+    <meta property="og:image" content="https://robena.ro/images/hero-robena-transparent.png" />
 
     <title>Contact și solicitare ofertă | ROBENA TRADING</title>
   </head>
@@ -242,6 +252,8 @@ import SeapSection from "../components/SeapSection.astro";
 
       <SeapSection />
     </main>
+
+    <Footer />
 
     <script>
       const ENDPOINT_SUPABASE =

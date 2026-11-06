@@ -2,7 +2,13 @@
 import "../../../styles/global.css";
 import Header from "../../../components/Header.astro";
 import SeapSection from "../../../components/SeapSection.astro";
+import Footer from "../../../components/Footer.astro";
 import { supabase } from "../../../lib/supabase.js";
+import {
+  descriereHtml,
+  descriereScurta,
+  descriereText,
+} from "../../../lib/descriere.js";
 
 export async function getStaticPaths() {
   const { data: produse, error: produseError } = await supabase
@@ -38,6 +44,15 @@ export async function getStaticPaths() {
         return null;
       }
 
+      // Alte produse din aceeași categorie (legături interne)
+      const produseSimilare = (produse ?? [])
+        .filter(
+          (p) =>
+            p.categorie_id === produs.categorie_id &&
+            p.id !== produs.id
+        )
+        .slice(0, 6);
+
       return {
         params: {
           categorie: categorie.slug,
@@ -46,13 +61,14 @@ export async function getStaticPaths() {
         props: {
           produs,
           categorie,
+          produseSimilare,
         },
       };
     })
     .filter(Boolean);
 }
 
-const { produs, categorie } = Astro.props;
+const { produs, categorie, produseSimilare = [] } = Astro.props;
 
 const siteUrl = "https://robena.ro";
 
@@ -63,9 +79,10 @@ const seoTitle =
   `${produs.nume} | ${categorie.nume} | ROBENA TRADING`;
 
 const seoDescription =
-  produs.descriere?.length > 155
-    ? `${produs.descriere.slice(0, 152)}...`
-    : produs.descriere;
+  descriereScurta(produs.descriere, produs.nume) ||
+  `${produs.nume} pentru spitale, clinici, instituții și companii. Solicitați ofertă de la ROBENA TRADING.`;
+
+const continutDescriere = descriereHtml(produs.descriere, produs.nume);
 
 const productImage =
   produs.imagine?.startsWith("http")
@@ -133,13 +150,9 @@ const productSchema = {
   "@type": "Product",
   "@id": `${productUrl}#product`,
   name: produs.nume,
-  description: produs.descriere,
+  description: descriereText(produs.descriere, produs.nume),
   image: productImage,
   url: productUrl,
-  brand: {
-    "@type": "Brand",
-    name: "ROBENA TRADING",
-  },
   category: categorie.nume,
 };
 ---
@@ -192,7 +205,7 @@ const productSchema = {
 
     <meta
       property="og:type"
-      content="website"
+      content="product"
     />
 
     <meta
@@ -329,11 +342,11 @@ const productSchema = {
 
         <!-- Produs -->
 
-        <div class="grid items-center gap-12 lg:grid-cols-2">
+        <div class="grid items-start gap-12 lg:grid-cols-2">
 
           <!-- Imagine produs -->
 
-          <div class="flex min-h-[420px] items-center justify-center">
+          <div class="flex min-h-[420px] items-center justify-center lg:sticky lg:top-28">
 
             <img
               src={produs.imagine}
@@ -359,16 +372,26 @@ const productSchema = {
               {produs.nume}
             </h1>
 
-            <p class="mt-6 text-lg leading-8 text-slate-600">
-              {produs.descriere}
-            </p>
+            <div
+              class="descriere-produs mt-6"
+              set:html={continutDescriere}
+            />
 
-            <a
-              href="/contact/"
-              class="mt-8 inline-flex rounded-xl bg-blue-700 px-7 py-3 font-semibold text-white transition hover:bg-blue-800"
-            >
-              Solicită ofertă
-            </a>
+            <div class="mt-8 flex flex-wrap items-center gap-4">
+              <a
+                href={`/contact/?produs=${encodeURIComponent(produs.nume)}`}
+                class="inline-flex rounded-xl bg-blue-700 px-7 py-3 font-semibold text-white transition hover:bg-blue-800"
+              >
+                Solicită ofertă
+              </a>
+
+              <a
+                href="tel:+40740413699"
+                class="font-semibold text-slate-700 transition hover:text-blue-700"
+              >
+                sau sunați: 0740 413 699
+              </a>
+            </div>
 
           </div>
 
@@ -377,9 +400,51 @@ const productSchema = {
       </section>
 
 
+      {
+        produseSimilare.length > 0 && (
+          <section class="mx-auto max-w-7xl px-6 pb-16">
+            <h2 class="text-2xl font-bold tracking-tight md:text-3xl">
+              Alte produse din categoria {categorie.nume}
+            </h2>
+
+            <div class="mt-8 grid grid-cols-2 gap-6 md:grid-cols-3 lg:grid-cols-6">
+              {produseSimilare.map((p) => (
+                <a
+                  href={`/produse/${categorie.slug}/${p.slug}/`}
+                  class="group block"
+                >
+                  <div class="flex h-36 items-center justify-center p-2">
+                    <img
+                      src={p.imagine}
+                      alt={`${p.nume} - ${categorie.nume}`}
+                      class="h-full w-full object-contain transition duration-300 group-hover:scale-105"
+                      loading="lazy"
+                      decoding="async"
+                    />
+                  </div>
+
+                  <p class="mt-3 text-sm font-semibold leading-5 text-slate-900 group-hover:text-blue-700">
+                    {p.nume}
+                  </p>
+                </a>
+              ))}
+            </div>
+
+            <a
+              href={`/produse/${categorie.slug}/`}
+              class="mt-8 inline-block font-semibold text-blue-700 hover:text-blue-800"
+            >
+              Vezi toate produsele din categoria {categorie.nume} →
+            </a>
+          </section>
+        )
+      }
+
       <SeapSection />
 
     </main>
+
+    <Footer />
 
   </body>
 

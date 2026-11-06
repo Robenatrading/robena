@@ -4,6 +4,11 @@ on:
   push:
     branches: [main]
   workflow_dispatch:
+  # Reconstruiește site-ul zilnic (03:17 ora României), ca produsele
+  # adăugate din panoul de administrare să primească pagini proprii
+  # și să apară în sitemap fără o publicare manuală.
+  schedule:
+    - cron: "17 1 * * *"
 
 permissions:
   contents: read

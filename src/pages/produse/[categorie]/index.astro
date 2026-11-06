@@ -2,7 +2,10 @@
 import "../../../styles/global.css";
 import Header from "../../../components/Header.astro";
 import SeapSection from "../../../components/SeapSection.astro";
+import Footer from "../../../components/Footer.astro";
 import { supabase } from "../../../lib/supabase.js";
+import { descriereText } from "../../../lib/descriere.js";
+import { seoCategorie } from "../../../lib/categoriiSeo.js";
 
 export async function getStaticPaths() {
   const { data: categorii, error } = await supabase
@@ -40,10 +43,12 @@ const categoryUrl =
   `${siteUrl}/produse/${categorie.slug}/`;
 
 const seoTitle =
-  `${categorie.nume} | Produse profesionale | ROBENA TRADING`;
+  `${categorie.nume} pentru spitale și instituții | ROBENA TRADING`;
 
-const seoDescription =
-  `Descoperă gama de ${categorie.nume.toLowerCase()} oferită de ROBENA TRADING. Produse profesionale pentru instituții, companii, organizații și alți beneficiari din România.`;
+const { descriere: seoDescription, intro: introCategorie } =
+  seoCategorie(categorie);
+
+const areProduse = !produseError && (produse ?? []).length > 0;
 
 const categorySchema = {
   "@context": "https://schema.org",
@@ -225,10 +230,8 @@ const itemListSchema = {
             {categorie.nume}
           </h1>
 
-          <p class="mx-auto mt-4 max-w-3xl text-slate-600">
-            Descoperă produsele din categoria {categorie.nume},
-            disponibile în diferite variante și configurații,
-            adaptate cerințelor beneficiarilor.
+          <p class="mx-auto mt-4 max-w-3xl leading-7 text-slate-600">
+            {introCategorie}
           </p>
         </div>
 
@@ -274,7 +277,7 @@ const itemListSchema = {
                       </h2>
 
                       <p class="mt-3 line-clamp-3 leading-7 text-slate-600">
-                        {produs.descriere}
+                        {descriereText(produs.descriere, produs.nume)}
                       </p>
 
                       <span class="mt-5 inline-block font-semibold text-blue-700">
@@ -285,12 +288,10 @@ const itemListSchema = {
                 ))}
               </div>
 
+              {!areProduse && (
               <div
                 id="fara-produse"
-                class:list={[
-                  "mx-auto mt-12 max-w-2xl p-10 text-center",
-                  produse && produse.length > 0 && "hidden",
-                ]}
+                class="mx-auto mt-12 max-w-2xl p-10 text-center"
               >
                 <p class="text-lg font-semibold">
                   Produsele din această categorie vor fi adăugate în curând.
@@ -307,6 +308,7 @@ const itemListSchema = {
                   Contactează-ne
                 </a>
               </div>
+              )}
             </>
           )
         }
@@ -315,8 +317,11 @@ const itemListSchema = {
       <SeapSection />
     </main>
 
+    <Footer />
+
     <script>
       import { supabase } from "../../../lib/supabase.js";
+      import { descriereText } from "../../../lib/descriere.js";
 
       const listaProduse =
         document.querySelector("#lista-produse");
@@ -392,7 +397,9 @@ const itemListSchema = {
                     escapeHtml(produs.nume);
 
                   const descriere =
-                    escapeHtml(produs.descriere);
+                    escapeHtml(
+                      descriereText(produs.descriere, produs.nume)
+                    );
 
                   const imagine =
                     escapeHtml(produs.imagine);

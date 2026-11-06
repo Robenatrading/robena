@@ -31,7 +31,7 @@ Produsele pot fi disponibile in diferite variante si configuratii, in functie de
 - Piata principala: Romania
 - Companie: ROBENA TRADING
 - Website oficial: https://robena.ro/
-- Catalog produse: https://robena.ro/produse/
+- Catalog produse: https://robena.ro/#produse
 - Contact: https://robena.ro/contact/
 - Sitemap: https://robena.ro/sitemap-index.xml
 

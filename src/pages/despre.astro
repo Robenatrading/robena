@@ -1,13 +1,46 @@
 ---
 import "../styles/global.css";
 import Header from "../components/Header.astro";
+import SeapSection from "../components/SeapSection.astro";
+import Footer from "../components/Footer.astro";
+
+const siteUrl = "https://robena.ro";
+const pageUrl = `${siteUrl}/despre/`;
+const seoTitle = "Despre noi | ROBENA TRADING – furnizor de mobilier și echipamente medicale";
+const seoDescription =
+  "ROBENA TRADING este o companie românească ce furnizează mobilier medical și metalic, aparatură, echipamente, textile și consumabile pentru spitale, instituții și companii.";
+
+const aboutSchema = {
+  "@context": "https://schema.org",
+  "@type": "AboutPage",
+  url: pageUrl,
+  name: seoTitle,
+  description: seoDescription,
+  inLanguage: "ro-RO",
+  about: { "@id": `${siteUrl}/#organization` },
+};
 ---
 
+<!doctype html>
 <html lang="ro">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Despre noi | ROBENA TRADING</title>
+    <title>{seoTitle}</title>
+    <meta name="description" content={seoDescription} />
+    <meta name="robots" content="index, follow, max-image-preview:large" />
+    <link rel="canonical" href={pageUrl} />
+    <link rel="icon" type="image/png" href="/favicon.png?v=2" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="ro_RO" />
+    <meta property="og:site_name" content="ROBENA TRADING" />
+    <meta property="og:title" content={seoTitle} />
+    <meta property="og:description" content={seoDescription} />
+    <meta property="og:url" content={pageUrl} />
+    <meta property="og:image" content={`${siteUrl}/images/hero-robena-transparent.png`} />
+
+    <script type="application/ld+json" set:html={JSON.stringify(aboutSchema)}></script>
   </head>
 
   <body class="bg-slate-50">
@@ -59,6 +92,10 @@ import Header from "../components/Header.astro";
           </p>
         </div>
       </div>
+
+      <SeapSection />
     </main>
+
+    <Footer />
   </body>
 </html>
