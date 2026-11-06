@@ -142,19 +142,10 @@ const webPageSchema = {
 
 
 /* =========================================================
-   DATE STRUCTURATE - PRODUS
+   Fără schema „Product”: pe site nu sunt prețuri, iar Google
+   o marchează ca „problemă critică” (lipsește offers).
+   Se poate readăuga când produsele vor avea preț afișat.
    ========================================================= */
-
-const productSchema = {
-  "@context": "https://schema.org",
-  "@type": "Product",
-  "@id": `${productUrl}#product`,
-  name: produs.nume,
-  description: descriereText(produs.descriere, produs.nume),
-  image: productImage,
-  url: productUrl,
-  category: categorie.nume,
-};
 ---
 
 <!doctype html>
@@ -289,12 +280,6 @@ const productSchema = {
     ></script>
 
 
-    <!-- Product -->
-
-    <script
-      type="application/ld+json"
-      set:html={JSON.stringify(productSchema)}
-    ></script>
 
   </head>
 
