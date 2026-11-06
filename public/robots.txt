@@ -5,6 +5,7 @@ Disallow: /admin-produse
 Disallow: /admin-adauga-produs
 Disallow: /admin-lista-produse
 Disallow: /admin-editeaza-produs
+Disallow: /admin-categorii
 
 User-agent: OAI-SearchBot
 Allow: /
@@ -13,6 +14,7 @@ Disallow: /admin-produse
 Disallow: /admin-adauga-produs
 Disallow: /admin-lista-produse
 Disallow: /admin-editeaza-produs
+Disallow: /admin-categorii
 
 User-agent: Google-Extended
 Allow: /
@@ -21,6 +23,7 @@ Disallow: /admin-produse
 Disallow: /admin-adauga-produs
 Disallow: /admin-lista-produse
 Disallow: /admin-editeaza-produs
+Disallow: /admin-categorii
 
 User-agent: PerplexityBot
 Allow: /
@@ -29,5 +32,6 @@ Disallow: /admin-produse
 Disallow: /admin-adauga-produs
 Disallow: /admin-lista-produse
 Disallow: /admin-editeaza-produs
+Disallow: /admin-categorii
 
 Sitemap: https://robena.ro/sitemap-index.xml

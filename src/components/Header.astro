@@ -1,3 +1,9 @@
+---
+import { categoriiSite } from "../lib/categoriiSite.js";
+
+const categorii = await categoriiSite();
+---
+
 <header
   class="sticky top-0 z-50 border-b border-slate-200 bg-white/95 backdrop-blur"
 >
@@ -63,61 +69,16 @@
           <div
             class="rounded-2xl border border-slate-200 bg-white p-3 shadow-xl"
           >
-            <a
-              href="/produse/mobilier-medical/"
-              class="block rounded-lg px-4 py-3 hover:bg-slate-100 hover:text-blue-700"
-            >
-              Mobilier medical
-            </a>
-
-            <a
-              href="/produse/mobilier-metalic/"
-              class="block rounded-lg px-4 py-3 hover:bg-slate-100 hover:text-blue-700"
-            >
-              Mobilier metalic
-            </a>
-
-            <a
-              href="/produse/mobilier-de-birou/"
-              class="block rounded-lg px-4 py-3 hover:bg-slate-100 hover:text-blue-700"
-            >
-              Mobilier de birou
-            </a>
-
-            <a
-              href="/produse/aparatura/"
-              class="block rounded-lg px-4 py-3 hover:bg-slate-100 hover:text-blue-700"
-            >
-              Aparatură
-            </a>
-
-            <a
-              href="/produse/echipamente/"
-              class="block rounded-lg px-4 py-3 hover:bg-slate-100 hover:text-blue-700"
-            >
-              Echipamente
-            </a>
-
-            <a
-              href="/produse/textile/"
-              class="block rounded-lg px-4 py-3 hover:bg-slate-100 hover:text-blue-700"
-            >
-              Textile
-            </a>
-
-            <a
-              href="/produse/consumabile/"
-              class="block rounded-lg px-4 py-3 hover:bg-slate-100 hover:text-blue-700"
-            >
-              Consumabile
-            </a>
-
-            <a
-              href="/produse/alte-produse/"
-              class="block rounded-lg px-4 py-3 hover:bg-slate-100 hover:text-blue-700"
-            >
-              Alte produse
-            </a>
+            {
+              categorii.map((c) => (
+                <a
+                  href={`/produse/${c.slug}/`}
+                  class="block rounded-lg px-4 py-3 hover:bg-slate-100 hover:text-blue-700"
+                >
+                  {c.nume}
+                </a>
+              ))
+            }
           </div>
         </div>
       </div>

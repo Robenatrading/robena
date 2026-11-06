@@ -85,7 +85,7 @@ function eliminaFundal(imageData) {
   return true;
 }
 
-export async function comprimaImagine(fisier, laturaMaxima = 1200, calitate = 0.82) {
+export async function comprimaImagine(fisier, laturaMaxima = 1200, calitate = 0.82, faraFundal = true) {
   try {
     if (!fisier || !fisier.type?.startsWith("image/")) return fisier;
 
@@ -103,7 +103,7 @@ export async function comprimaImagine(fisier, laturaMaxima = 1200, calitate = 0.
     bitmap.close?.();
 
     const imageData = ctx.getImageData(0, 0, latime, inaltime);
-    if (eliminaFundal(imageData)) {
+    if (faraFundal && eliminaFundal(imageData)) {
       ctx.putImageData(imageData, 0, 0);
     }
 

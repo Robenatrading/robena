@@ -1,0 +1,454 @@
+---
+import "../styles/global.css";
+---
+
+<!doctype html>
+<html lang="ro">
+  <head>
+    <meta name="robots" content="noindex, nofollow" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/png" href="/favicon.png?v=2" />
+    <title>Categorii | ROBENA TRADING</title>
+  </head>
+
+  <body class="min-h-screen bg-slate-100 text-slate-900">
+    <main class="mx-auto max-w-7xl px-6 py-10">
+      <div class="mb-8 flex flex-col justify-between gap-5 sm:flex-row sm:items-center">
+        <div>
+          <h1 class="text-3xl font-bold">Categorii</h1>
+          <p class="mt-2 text-slate-600">
+            Adaugă, modifică sau șterge categoriile de produse.
+          </p>
+        </div>
+
+        <div class="flex gap-3">
+          <button
+            id="buton-nou"
+            type="button"
+            class="rounded-lg bg-blue-700 px-5 py-3 font-semibold text-white hover:bg-blue-800"
+          >
+            Adaugă categorie
+          </button>
+
+          <a
+            href="/admin-produse/"
+            class="rounded-lg bg-slate-900 px-5 py-3 font-semibold text-white hover:bg-slate-700"
+          >
+            Înapoi
+          </a>
+        </div>
+      </div>
+
+      <section id="loading" class="rounded-xl bg-white p-6 shadow">
+        Se încarcă categoriile...
+      </section>
+
+      <section id="admin-content" class="hidden">
+        <p id="mesaj" class="mb-6 hidden rounded-lg px-4 py-3 text-sm" role="status"></p>
+
+        <!-- Formular adăugare / modificare -->
+        <form id="formular" class="mb-8 hidden rounded-xl bg-white p-6 shadow">
+          <h2 id="titlu-formular" class="text-xl font-bold">Categorie nouă</h2>
+
+          <div class="mt-5 grid gap-5 md:grid-cols-2">
+            <div>
+              <label for="nume" class="mb-1 block text-sm font-semibold">Nume categorie *</label>
+              <input
+                id="nume"
+                required
+                placeholder="ex. Mobilier pentru laborator"
+                class="w-full rounded-lg border border-slate-300 px-4 py-3 outline-none focus:border-blue-600"
+              />
+            </div>
+
+            <div>
+              <label for="slug" class="mb-1 block text-sm font-semibold">
+                Adresa paginii (se completează singură)
+              </label>
+              <div class="flex items-center rounded-lg border border-slate-300 bg-slate-50 px-4">
+                <span class="text-sm text-slate-500">robena.ro/produse/</span>
+                <input
+                  id="slug"
+                  required
+                  pattern="[a-z0-9]+(-[a-z0-9]+)*"
+                  title="Doar litere mici fără diacritice, cifre și cratimă"
+                  class="w-full bg-transparent py-3 outline-none"
+                />
+              </div>
+              <p id="avertisment-slug" class="mt-1 hidden text-xs text-amber-700">
+                Atenție: dacă schimbi adresa, linkurile vechi către această categorie nu vor mai funcționa.
+              </p>
+            </div>
+
+            <div>
+              <label for="ordine" class="mb-1 block text-sm font-semibold">
+                Poziția în meniu (1 = prima)
+              </label>
+              <input
+                id="ordine"
+                type="number"
+                min="1"
+                required
+                class="w-full rounded-lg border border-slate-300 px-4 py-3 outline-none focus:border-blue-600"
+              />
+            </div>
+
+            <div>
+              <label for="imagine" class="mb-1 block text-sm font-semibold">
+                Poza categoriei <span id="imagine-obligatorie">*</span>
+              </label>
+              <input
+                id="imagine"
+                type="file"
+                accept="image/png,image/jpeg,image/webp"
+                class="w-full rounded-lg border border-slate-300 bg-white px-4 py-2"
+              />
+              <p class="mt-1 text-xs text-slate-500">
+                Se micșorează automat. Pentru o categorie existentă, alege o poză doar dacă vrei s-o schimbi.
+              </p>
+            </div>
+          </div>
+
+          <div class="mt-5 flex items-center gap-4">
+            <img
+              id="previzualizare"
+              alt=""
+              class="hidden h-24 w-36 rounded-lg object-cover"
+            />
+          </div>
+
+          <div class="mt-6 flex flex-wrap gap-3">
+            <button
+              id="buton-salveaza"
+              type="submit"
+              class="rounded-lg bg-blue-700 px-6 py-3 font-semibold text-white hover:bg-blue-800 disabled:opacity-60"
+            >
+              Salvează categoria
+            </button>
+
+            <button
+              id="buton-anuleaza"
+              type="button"
+              class="rounded-lg bg-slate-200 px-6 py-3 font-semibold text-slate-800 hover:bg-slate-300"
+            >
+              Anulează
+            </button>
+          </div>
+        </form>
+
+        <!-- Lista categoriilor -->
+        <div id="lista" class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4"></div>
+
+        <p class="mt-8 text-sm text-slate-500">
+          După orice modificare, site-ul se actualizează automat în 2–3 minute.
+        </p>
+      </section>
+    </main>
+
+    <script>
+      import { supabase } from "../lib/supabase.js";
+      import { comprimaImagine } from "../lib/comprimaImagine.js";
+
+      const loading = document.querySelector("#loading");
+      const adminContent = document.querySelector("#admin-content");
+      const mesaj = document.querySelector("#mesaj");
+      const lista = document.querySelector("#lista");
+
+      const formular = document.querySelector("#formular");
+      const titluFormular = document.querySelector("#titlu-formular");
+      const numeInput = document.querySelector("#nume");
+      const slugInput = document.querySelector("#slug");
+      const ordineInput = document.querySelector("#ordine");
+      const imagineInput = document.querySelector("#imagine");
+      const imagineObligatorie = document.querySelector("#imagine-obligatorie");
+      const previzualizare = document.querySelector("#previzualizare");
+      const avertismentSlug = document.querySelector("#avertisment-slug");
+      const butonSalveaza = document.querySelector("#buton-salveaza");
+      const butonAnuleaza = document.querySelector("#buton-anuleaza");
+      const butonNou = document.querySelector("#buton-nou");
+
+      let categorii = [];
+      let numarProduse = new Map();
+      let categorieEditata = null; // null = categorie nouă
+      let slugModificatManual = false;
+
+      /* ---------- utilitare ---------- */
+
+      function arataMesaj(text, tip = "eroare") {
+        mesaj.textContent = text;
+        mesaj.classList.remove("hidden", "bg-red-100", "text-red-700", "bg-green-100", "text-green-700");
+        mesaj.classList.add(...(tip === "succes" ? ["bg-green-100", "text-green-700"] : ["bg-red-100", "text-red-700"]));
+        mesaj.scrollIntoView({ behavior: "smooth", block: "nearest" });
+      }
+
+      function escapeHtml(text = "") {
+        return String(text)
+          .replaceAll("&", "&amp;")
+          .replaceAll("<", "&lt;")
+          .replaceAll(">", "&gt;")
+          .replaceAll('"', "&quot;")
+          .replaceAll("'", "&#039;");
+      }
+
+      function creeazaSlug(text) {
+        return String(text)
+          .normalize("NFD")
+          .replace(/[̀-ͯ]/g, "")
+          .toLowerCase()
+          .replace(/[^a-z0-9]+/g, "-")
+          .replace(/^-+|-+$/g, "");
+      }
+
+      function imagineAfisata(src) {
+        // pozele locale au și variantă .webp mai mică
+        return /^\/images\/.*\.png$/i.test(src || "") ? src.replace(/\.png$/i, ".webp") : src;
+      }
+
+      /* ---------- încărcare ---------- */
+
+      async function incarca() {
+        const [{ data: cats, error: e1 }, { data: produse, error: e2 }] = await Promise.all([
+          supabase.from("categorii").select("id, nume, slug, imagine, ordine").order("ordine"),
+          supabase.from("produse").select("id, categorie_id"),
+        ]);
+
+        if (e1 || e2) {
+          arataMesaj("Categoriile nu au putut fi încărcate: " + (e1 || e2).message);
+          return;
+        }
+
+        categorii = cats ?? [];
+        numarProduse = new Map();
+        for (const p of produse ?? []) {
+          numarProduse.set(p.categorie_id, (numarProduse.get(p.categorie_id) ?? 0) + 1);
+        }
+
+        afiseaza();
+      }
+
+      function afiseaza() {
+        if (!categorii.length) {
+          lista.innerHTML = `<p class="rounded-xl bg-white p-6 text-slate-600 shadow">Nu există categorii.</p>`;
+          return;
+        }
+
+        lista.innerHTML = categorii
+          .map((c) => {
+            const nr = numarProduse.get(c.id) ?? 0;
+            return `
+              <article class="overflow-hidden rounded-xl bg-white shadow">
+                <div class="h-36 bg-white">
+                  ${c.imagine ? `<img src="${escapeHtml(imagineAfisata(c.imagine))}" alt="" class="h-full w-full object-cover" loading="lazy" />` : ""}
+                </div>
+                <div class="p-4">
+                  <p class="text-xs font-semibold text-blue-700">Poziția ${escapeHtml(c.ordine ?? "-")}</p>
+                  <h2 class="mt-1 font-bold">${escapeHtml(c.nume)}</h2>
+                  <p class="mt-1 text-xs text-slate-500">/produse/${escapeHtml(c.slug)}/ · ${nr} ${nr === 1 ? "produs" : "produse"}</p>
+                  <div class="mt-3 grid grid-cols-2 gap-2">
+                    <button type="button" data-modifica="${c.id}"
+                      class="rounded-lg bg-blue-700 px-2 py-2 text-xs font-semibold text-white hover:bg-blue-800">
+                      Modifică
+                    </button>
+                    <button type="button" data-sterge="${c.id}"
+                      class="rounded-lg bg-red-700 px-2 py-2 text-xs font-semibold text-white hover:bg-red-800 disabled:opacity-60">
+                      Șterge
+                    </button>
+                  </div>
+                </div>
+              </article>`;
+          })
+          .join("");
+      }
+
+      /* ---------- formular ---------- */
+
+      function deschideFormular(categorie = null) {
+        categorieEditata = categorie;
+        slugModificatManual = Boolean(categorie);
+        formular.reset();
+        previzualizare.classList.add("hidden");
+        avertismentSlug.classList.add("hidden");
+
+        if (categorie) {
+          titluFormular.textContent = `Modifică: ${categorie.nume}`;
+          numeInput.value = categorie.nume;
+          slugInput.value = categorie.slug;
+          ordineInput.value = categorie.ordine ?? 1;
+          imagineInput.required = false;
+          imagineObligatorie.classList.add("hidden");
+          if (categorie.imagine) {
+            previzualizare.src = imagineAfisata(categorie.imagine);
+            previzualizare.classList.remove("hidden");
+          }
+        } else {
+          titluFormular.textContent = "Categorie nouă";
+          const maxOrdine = Math.max(0, ...categorii.map((c) => Number(c.ordine) || 0));
+          ordineInput.value = maxOrdine + 1;
+          imagineInput.required = true;
+          imagineObligatorie.classList.remove("hidden");
+        }
+
+        formular.classList.remove("hidden");
+        formular.scrollIntoView({ behavior: "smooth", block: "start" });
+        numeInput.focus();
+      }
+
+      function inchideFormular() {
+        formular.classList.add("hidden");
+        categorieEditata = null;
+      }
+
+      numeInput.addEventListener("input", () => {
+        if (!slugModificatManual) slugInput.value = creeazaSlug(numeInput.value);
+      });
+
+      slugInput.addEventListener("input", () => {
+        slugModificatManual = true;
+        slugInput.value = creeazaSlug(slugInput.value);
+        avertismentSlug.classList.toggle(
+          "hidden",
+          !categorieEditata || slugInput.value === categorieEditata.slug
+        );
+      });
+
+      imagineInput.addEventListener("change", () => {
+        const fisier = imagineInput.files?.[0];
+        if (fisier) {
+          previzualizare.src = URL.createObjectURL(fisier);
+          previzualizare.classList.remove("hidden");
+        }
+      });
+
+      butonNou.addEventListener("click", () => deschideFormular(null));
+      butonAnuleaza.addEventListener("click", inchideFormular);
+
+      formular.addEventListener("submit", async (event) => {
+        event.preventDefault();
+        if (!formular.checkValidity()) {
+          formular.reportValidity();
+          return;
+        }
+
+        const nume = numeInput.value.trim();
+        const slug = creeazaSlug(slugInput.value);
+        const ordine = Number(ordineInput.value) || 1;
+
+        const dublura = categorii.find(
+          (c) => c.slug === slug && c.id !== categorieEditata?.id
+        );
+        if (dublura) {
+          arataMesaj(`Există deja categoria „${dublura.nume}” cu adresa /produse/${slug}/. Alege altă adresă.`);
+          return;
+        }
+
+        butonSalveaza.disabled = true;
+        butonSalveaza.textContent = "Se salvează...";
+
+        try {
+          const date = { nume, slug, ordine };
+          const fisier = imagineInput.files?.[0];
+
+          if (fisier) {
+            butonSalveaza.textContent = "Se micșorează poza...";
+            // pozele de categorie sunt de obicei fotografii cu cameră → păstrăm fundalul
+            const mic = await comprimaImagine(fisier, 1200, 0.8, false);
+            const numeFisier = `categorie-${slug}-${Date.now()}.${mic.name.split(".").pop()}`;
+
+            butonSalveaza.textContent = "Se încarcă poza...";
+            const { error: eroareUpload } = await supabase.storage
+              .from("produse")
+              .upload(numeFisier, mic, {
+                cacheControl: "31536000",
+                upsert: false,
+                contentType: mic.type,
+              });
+            if (eroareUpload) throw new Error("Poza nu a putut fi încărcată: " + eroareUpload.message);
+
+            const { data: url } = supabase.storage.from("produse").getPublicUrl(numeFisier);
+            date.imagine = url.publicUrl;
+          }
+
+          butonSalveaza.textContent = "Se salvează...";
+
+          const { error } = categorieEditata
+            ? await supabase.from("categorii").update(date).eq("id", categorieEditata.id)
+            : await supabase.from("categorii").insert(date);
+
+          if (error) throw new Error(error.message);
+
+          arataMesaj(
+            categorieEditata
+              ? `Categoria „${nume}” a fost modificată. Site-ul se actualizează în 2–3 minute.`
+              : `Categoria „${nume}” a fost adăugată. Site-ul se actualizează în 2–3 minute.`,
+            "succes"
+          );
+          inchideFormular();
+          await incarca();
+        } catch (eroare) {
+          arataMesaj("Categoria nu a putut fi salvată: " + eroare.message);
+        } finally {
+          butonSalveaza.disabled = false;
+          butonSalveaza.textContent = "Salvează categoria";
+        }
+      });
+
+      /* ---------- butoane din listă ---------- */
+
+      lista.addEventListener("click", async (event) => {
+        const btnModifica = event.target.closest("[data-modifica]");
+        const btnSterge = event.target.closest("[data-sterge]");
+
+        if (btnModifica) {
+          const c = categorii.find((x) => x.id === Number(btnModifica.dataset.modifica));
+          if (c) deschideFormular(c);
+          return;
+        }
+
+        if (btnSterge) {
+          const id = Number(btnSterge.dataset.sterge);
+          const c = categorii.find((x) => x.id === id);
+          if (!c) return;
+
+          const nr = numarProduse.get(id) ?? 0;
+          if (nr > 0) {
+            arataMesaj(
+              `Categoria „${c.nume}” are ${nr} ${nr === 1 ? "produs" : "produse"}. ` +
+              `Mută-le întâi în altă categorie sau șterge-le (din „Produse existente”), apoi poți șterge categoria.`
+            );
+            return;
+          }
+
+          if (!window.confirm(`Sigur vrei să ștergi categoria „${c.nume}”?`)) return;
+
+          btnSterge.disabled = true;
+          btnSterge.textContent = "Se șterge...";
+
+          const { error } = await supabase.from("categorii").delete().eq("id", id);
+
+          if (error) {
+            arataMesaj("Categoria nu a putut fi ștearsă: " + error.message);
+            btnSterge.disabled = false;
+            btnSterge.textContent = "Șterge";
+            return;
+          }
+
+          arataMesaj(`Categoria „${c.nume}” a fost ștearsă. Site-ul se actualizează în 2–3 minute.`, "succes");
+          await incarca();
+        }
+      });
+
+      /* ---------- pornire ---------- */
+
+      const { data: { session } } = await supabase.auth.getSession();
+
+      if (!session) {
+        window.location.href = "/admin/";
+      } else {
+        loading.classList.add("hidden");
+        adminContent.classList.remove("hidden");
+        await incarca();
+      }
+    </script>
+  </body>
+</html>
