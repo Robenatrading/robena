@@ -1,96 +1,27 @@
 ---
 /* =========================================================
-   Subsol comun pentru toate paginile publice.
+   Subsol simplu, comun pentru toate paginile publice.
    Datele firmei sunt în src/lib/firma.js.
    ========================================================= */
 import { firma } from "../lib/firma.js";
 
-const categorii = [
-  { nume: "Mobilier medical", slug: "mobilier-medical" },
-  { nume: "Mobilier metalic", slug: "mobilier-metalic" },
-  { nume: "Mobilier de birou", slug: "mobilier-de-birou" },
-  { nume: "Aparatură medicală", slug: "aparatura" },
-  { nume: "Echipamente", slug: "echipamente" },
-  { nume: "Textile", slug: "textile" },
-  { nume: "Consumabile", slug: "consumabile" },
-  { nume: "Alte produse", slug: "alte-produse" },
-];
-
 const an = new Date().getFullYear();
 ---
 
-<footer id="contact" class="border-t border-slate-200 bg-white">
-  <div class="mx-auto grid max-w-7xl gap-10 px-6 py-12 md:grid-cols-3">
-    <div>
-      <p class="text-lg font-bold text-slate-900">{firma.nume}</p>
+<footer id="contact" class="bg-white">
+  <div
+    class="mx-auto flex max-w-7xl flex-col gap-3 px-6 py-8 text-sm text-slate-600 md:flex-row md:items-center md:justify-between"
+  >
+    <p>© {an} {firma.nume}</p>
 
-      <p class="mt-3 leading-7 text-slate-600">
-        Furnizor de mobilier medical, mobilier metalic și de birou,
-        aparatură, echipamente, textile și consumabile pentru spitale,
-        clinici, instituții publice, școli și companii din România.
-      </p>
-
-      {
-        (firma.cui || firma.regCom) && (
-          <p class="mt-3 text-sm leading-6 text-slate-500">
-            {firma.cui && <span>CUI: {firma.cui}</span>}
-            {firma.cui && firma.regCom && <span> · </span>}
-            {firma.regCom && <span>Reg. Com.: {firma.regCom}</span>}
-          </p>
-        )
-      }
-    </div>
-
-    <nav aria-label="Categorii de produse">
-      <p class="font-bold text-slate-900">Produse</p>
-
-      <ul class="mt-3 grid grid-cols-2 gap-x-4 gap-y-2 text-slate-600 md:grid-cols-1">
-        {
-          categorii.map((c) => (
-            <li>
-              <a href={`/produse/${c.slug}/`} class="hover:text-blue-700">
-                {c.nume}
-              </a>
-            </li>
-          ))
-        }
-      </ul>
-    </nav>
-
-    <div>
-      <p class="font-bold text-slate-900">Contact</p>
-
-      <address class="mt-3 not-italic leading-8 text-slate-600">
-        {
-          firma.adresa.strada && (
-            <>
-              {firma.adresa.strada}, {firma.adresa.localitate},
-              jud. {firma.adresa.judet}
-              <br />
-            </>
-          )
-        }
-        <strong class="text-slate-900">Telefon:</strong>{" "}
-        <a href={`tel:${firma.telefon}`} class="hover:text-blue-700">
-          {firma.telefonAfisat}
-        </a>
-        <br />
-        <strong class="text-slate-900">Email:</strong>{" "}
-        <a href={`mailto:${firma.email}`} class="hover:text-blue-700">
-          {firma.email}
-        </a>
-      </address>
-
-      <p class="mt-4 flex flex-wrap gap-x-5 gap-y-2 text-slate-600">
-        <a href="/despre/" class="hover:text-blue-700">Despre noi</a>
-        <a href="/contact/" class="hover:text-blue-700">Solicită ofertă</a>
-      </p>
-    </div>
-  </div>
-
-  <div class="border-t border-slate-100">
-    <p class="mx-auto max-w-7xl px-6 py-5 text-sm text-slate-500">
-      © {an} {firma.nume}. Toate drepturile rezervate.
+    <p class="flex flex-wrap gap-x-6 gap-y-2">
+      <a href={`tel:${firma.telefon}`} class="hover:text-blue-700">
+        {firma.telefonAfisat}
+      </a>
+      <a href={`mailto:${firma.email}`} class="hover:text-blue-700">
+        {firma.email}
+      </a>
+      <a href="/contact/" class="hover:text-blue-700">Solicită ofertă</a>
     </p>
   </div>
 </footer>
