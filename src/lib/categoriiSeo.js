@@ -57,6 +57,36 @@ export const categoriiSeo = {
     intro:
       "Alte produse utile pentru spitale, centre de îngrijire și instituții: cântare medicale cu taliometru, scaune pliabile pentru transportul pacienților, scaune WC de cameră, cărucioare platformă, scări din aluminiu și saci pentru transport.",
   },
+  "sterilizare": {
+    descriere:
+      "Produse pentru sterilizare: autoclave, pungi și role de sterilizare, bandă indicatoare, indicatori chimici și casolete din inox.",
+    intro:
+      "Produse pentru sterilizarea instrumentarului în spitale, clinici, cabinete stomatologice și laboratoare: autoclave, pungi autoadezive și role de sterilizare, bandă indicatoare, indicatori chimici de proces și casolete din inox pentru instrumentar.",
+  },
+  "dezinfectanti": {
+    descriere:
+      "Dezinfectanți pentru unități sanitare: dezinfectant pentru mâini, suprafețe și instrumentar, tablete pe bază de clor, în ambalaje diverse.",
+    intro:
+      "Dezinfectanți pentru spitale, clinici, cabinete, școli și instituții: soluții pentru dezinfecția mâinilor, a suprafețelor și a instrumentarului medical, precum și tablete pe bază de clor, în ambalaje de diferite capacități.",
+  },
+  "echipamente-de-protectie": {
+    descriere:
+      "Echipamente de protecție: măști medicale și FFP2, viziere, ochelari de protecție, botoși și șorțuri de unică folosință pentru personal.",
+    intro:
+      "Echipamente de protecție pentru personalul medical și pentru instituții: măști medicale și măști FFP2, viziere, ochelari de protecție, botoși și șorțuri de unică folosință, potrivite pentru spitale, laboratoare, cabinete și unități de producție.",
+  },
+  "ati-urgenta": {
+    descriere:
+      "Echipamente ATI și urgență: baloane de resuscitare, gulere cervicale, atele, pipe Guedel, măști de oxigen și truse de prim ajutor.",
+    intro:
+      "Echipamente pentru ATI, UPU, ambulanțe și puncte de prim ajutor: baloane de resuscitare, gulere cervicale, atele de imobilizare, pipe Guedel, măști și canule pentru oxigen, umidificatoare pentru oxigen și truse de prim ajutor echipate.",
+  },
+  "instrumentar-chirurgical": {
+    descriere:
+      "Instrumentar chirurgical din inox: foarfece, pense anatomice și hemostatice, port-ace, truse de mică chirurgie și cutii pentru instrumentar.",
+    intro:
+      "Instrumentar chirurgical din oțel inoxidabil pentru spitale, clinici, cabinete și centre de recuperare: foarfece chirurgicale, pense anatomice și hemostatice, port-ace, ciocane pentru reflexe, truse de mică chirurgie și cutii din inox pentru păstrarea instrumentarului.",
+  },
 };
 
 export function seoCategorie(categorie) {
