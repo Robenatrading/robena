@@ -43,3 +43,25 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
+
+      # Golește automat cache-ul Cloudflare după fiecare publicare,
+      # ca toată lumea să vadă imediat varianta nouă a site-ului.
+      # Are nevoie de 2 secrete în GitHub: CLOUDFLARE_ZONE_ID și CLOUDFLARE_API_TOKEN.
+      - name: Golește cache-ul Cloudflare
+        env:
+          CF_ZONE_ID: ${{ secrets.CLOUDFLARE_ZONE_ID }}
+          CF_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+        run: |
+          if [ -z "$CF_ZONE_ID" ] || [ -z "$CF_API_TOKEN" ]; then
+            echo "Secretele Cloudflare lipsesc - pasul este sărit."
+            exit 0
+          fi
+          # GitHub Pages are nevoie de câteva secunde să servească varianta nouă
+          sleep 30
+          raspuns=$(curl -s -X POST \
+            "https://api.cloudflare.com/client/v4/zones/$CF_ZONE_ID/purge_cache" \
+            -H "Authorization: Bearer $CF_API_TOKEN" \
+            -H "Content-Type: application/json" \
+            --data '{"purge_everything":true}')
+          echo "$raspuns"
+          echo "$raspuns" | grep -q '"success":true' || { echo "Golirea cache-ului a eșuat"; exit 1; }
