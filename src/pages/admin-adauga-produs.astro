@@ -184,6 +184,7 @@ import "../styles/global.css";
 
     <script>
       import { supabase } from "../lib/supabase.js";
+      import { comprimaImagine } from "../lib/comprimaImagine.js";
 
       const loading =
         document.querySelector("#loading");
@@ -454,8 +455,18 @@ import "../styles/global.css";
           return;
         }
 
+        // Poza se micșorează automat (max. 1200 px, WebP)
+        submitButton.textContent =
+          "Se micșorează imaginea...";
+
+        const fisierIncarcat =
+          await comprimaImagine(fisierImagine);
+
+        submitButton.textContent =
+          "Se salvează...";
+
         const extensie =
-          fisierImagine.name
+          fisierIncarcat.name
             .split(".")
             .pop()
             .toLowerCase();
@@ -468,12 +479,12 @@ import "../styles/global.css";
             .from("produse")
             .upload(
               numeFisier,
-              fisierImagine,
+              fisierIncarcat,
               {
-                cacheControl: "3600",
+                cacheControl: "31536000",
                 upsert: false,
                 contentType:
-                  fisierImagine.type,
+                  fisierIncarcat.type,
               }
             );
 

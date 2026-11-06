@@ -11,8 +11,11 @@
       class="shrink-0"
     >
       <img
-        src="/images/logo-robena.png"
+        src="/images/logo-robena.webp"
         alt="ROBENA TRADING"
+        width="600"
+        height="400"
+        fetchpriority="high"
         class="h-24 w-auto object-contain md:h-32"
       />
     </a>
@@ -231,7 +234,8 @@
 </header>
 
 <script>
-  import { supabase } from "../lib/supabase.js";
+  // Supabase se încarcă doar când cineva folosește căutarea,
+  // nu la fiecare deschidere de pagină (pagini mai rapide pe telefon).
 
   const butonCautare =
     document.querySelector("#buton-cautare-produse");
@@ -522,6 +526,8 @@
     if (toateProdusele) {
       return toateProdusele;
     }
+
+    const { supabase } = await import("../lib/supabase.js");
 
     const { data: produse, error } =
       await supabase

@@ -4,6 +4,7 @@ import Header from "../../../components/Header.astro";
 import SeapSection from "../../../components/SeapSection.astro";
 import Footer from "../../../components/Footer.astro";
 import { supabase } from "../../../lib/supabase.js";
+import { imagineRapida } from "../../../lib/imagini.js";
 import {
   descriereHtml,
   descriereScurta,
@@ -334,10 +335,11 @@ const webPageSchema = {
           <div class="flex min-h-[420px] items-center justify-center lg:sticky lg:top-28">
 
             <img
-              src={produs.imagine}
+              src={imagineRapida(produs.imagine)}
               alt={`${produs.nume} - ${categorie.nume} - ROBENA TRADING`}
               class="max-h-[520px] w-full object-contain"
               loading="eager"
+              fetchpriority="high"
             />
 
           </div>
@@ -400,7 +402,7 @@ const webPageSchema = {
                 >
                   <div class="flex h-36 items-center justify-center p-2">
                     <img
-                      src={p.imagine}
+                      src={imagineRapida(p.imagine)}
                       alt={`${p.nume} - ${categorie.nume}`}
                       class="h-full w-full object-contain transition duration-300 group-hover:scale-105"
                       loading="lazy"

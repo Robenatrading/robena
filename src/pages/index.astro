@@ -5,6 +5,7 @@ import SeapSection from "../components/SeapSection.astro";
 import Footer from "../components/Footer.astro";
 import { supabase } from "../lib/supabase.js";
 import { organizationSchema as creeazaOrganizationSchema } from "../lib/firma.js";
+import { imagineRapida } from "../lib/imagini.js";
 
 const { data: categorii, error } = await supabase
   .from("categorii")
@@ -207,11 +208,12 @@ const websiteSchema = {
 
           <div class="flex items-center justify-center">
             <img
-              src="/images/hero-robena-transparent.png"
+              src="/images/hero-robena-transparent.webp"
               alt="Mobilier medical, mobilier metalic și produse profesionale ROBENA TRADING"
               class="w-full max-w-[700px] object-contain"
-              width="700"
-              height="700"
+              width="1200"
+              height="800"
+              fetchpriority="high"
             />
           </div>
         </div>
@@ -250,8 +252,11 @@ const websiteSchema = {
                   >
                     <div class="h-24 overflow-hidden bg-slate-100 sm:h-36 md:h-52">
                       <img
-                        src={categorie.imagine}
+                        src={imagineRapida(categorie.imagine)}
                         alt={`${categorie.nume} - ROBENA TRADING`}
+                        width="900"
+                        height="600"
+                        decoding="async"
                         class="h-full w-full object-cover transition duration-500 group-hover:scale-105"
                         loading="lazy"
                       />

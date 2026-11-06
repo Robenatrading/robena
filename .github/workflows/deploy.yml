@@ -15,6 +15,12 @@ permissions:
   pages: write
   id-token: write
 
+# Dacă vin mai multe publicări una după alta (de ex. adaugi 5 produse),
+# rulează una singură, iar următoarea o preia pe cea mai nouă.
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
 jobs:
   build:
     runs-on: ubuntu-latest

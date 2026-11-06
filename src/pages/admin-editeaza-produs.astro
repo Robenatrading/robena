@@ -186,6 +186,7 @@ import "../styles/global.css";
 
     <script>
       import { supabase } from "../lib/supabase.js";
+      import { comprimaImagine } from "../lib/comprimaImagine.js";
 
       const loading =
         document.querySelector("#loading");
@@ -463,8 +464,23 @@ import "../styles/global.css";
             let imagineFinala =
               produsCurent.imagine || "";
 
-            const fisierNou =
+            const fisierOriginal =
               imagineNouaInput.files[0];
+
+            if (fisierOriginal) {
+              submitButton.textContent =
+                "Se micșorează imaginea...";
+            }
+
+            // Poza se micșorează automat (max. 1200 px, WebP)
+            const fisierNou = fisierOriginal
+              ? await comprimaImagine(fisierOriginal)
+              : null;
+
+            if (fisierOriginal) {
+              submitButton.textContent =
+                "Se salvează...";
+            }
 
             if (fisierNou) {
               const tipuriAcceptate = [
@@ -508,7 +524,7 @@ import "../styles/global.css";
                     numeFisier,
                     fisierNou,
                     {
-                      cacheControl: "0",
+                      cacheControl: "31536000",
                       upsert: false,
                       contentType:
                         fisierNou.type,

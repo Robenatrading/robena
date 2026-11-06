@@ -99,11 +99,34 @@ import "../styles/global.css";
 </a>
           </article>
         </div>
+
+        <article class="mt-6 rounded-xl bg-white p-6 shadow">
+          <h2 class="text-xl font-bold">
+            Pregătește pozele existente
+          </h2>
+
+          <p class="mt-2 text-slate-600">
+            Pozele noi se pregătesc automat la încărcare: fundalul alb sau gri
+            deschis devine transparent și poza se micșorează. Butonul de mai jos
+            face același lucru, o singură dată, pentru pozele mai vechi.
+          </p>
+
+          <button
+            id="buton-optimizare"
+            type="button"
+            class="mt-5 inline-block rounded-lg bg-blue-700 px-5 py-3 font-semibold text-white hover:bg-blue-800 disabled:opacity-60"
+          >
+            Pregătește pozele acum
+          </button>
+
+          <p id="stare-optimizare" class="mt-4 whitespace-pre-line text-sm text-slate-700"></p>
+        </article>
       </section>
     </main>
 
 <script>
   import { supabase } from "../lib/supabase.js";
+  import { comprimaImagine } from "../lib/comprimaImagine.js";
 
   const loading = document.querySelector("#loading");
   const adminContent = document.querySelector("#admin-content");
@@ -123,6 +146,97 @@ import "../styles/global.css";
   logoutButton.addEventListener("click", async () => {
     await supabase.auth.signOut();
     window.location.href = "/admin/";
+  });
+
+  /* =========================================================
+     Micșorarea pozelor existente din Supabase Storage
+     ========================================================= */
+  const butonOptimizare = document.querySelector("#buton-optimizare");
+  const stareOptimizare = document.querySelector("#stare-optimizare");
+
+  function scrieStare(text) {
+    stareOptimizare.textContent = text;
+  }
+
+  butonOptimizare?.addEventListener("click", async () => {
+    butonOptimizare.disabled = true;
+    scrieStare("Se încarcă lista de produse...");
+
+    const { data: produse, error } = await supabase
+      .from("produse")
+      .select("id, nume, imagine")
+      .order("id", { ascending: true });
+
+    if (error) {
+      scrieStare("Eroare la încărcarea produselor: " + error.message);
+      butonOptimizare.disabled = false;
+      return;
+    }
+
+    // Pozele deja prelucrate de acest buton (nume „optimizat-...”) se sar
+    const dinStorage = (produse ?? []).filter(
+      (p) =>
+        typeof p.imagine === "string" &&
+        p.imagine.includes("/storage/v1/object/public/produse/") &&
+        !p.imagine.includes("/optimizat-")
+    );
+
+    let micsorate = 0;
+    let sarite = 0;
+    let erori = 0;
+    let economisit = 0;
+
+    for (let i = 0; i < dinStorage.length; i++) {
+      const produs = dinStorage[i];
+      scrieStare(`Se verifică ${i + 1} din ${dinStorage.length}: ${produs.nume}\nMicșorate: ${micsorate} · Deja mici: ${sarite} · Erori: ${erori}`);
+
+      try {
+        const raspuns = await fetch(produs.imagine, { cache: "no-store" });
+        if (!raspuns.ok) throw new Error("HTTP " + raspuns.status);
+
+        const blob = await raspuns.blob();
+
+        const fisier = new File([blob], "imagine", { type: blob.type || "image/png" });
+        const mic = await comprimaImagine(fisier);
+
+        if (mic === fisier) {
+          sarite++;
+          continue;
+        }
+
+        const numeFisier = `optimizat-${produs.id}-${Date.now()}.webp`;
+
+        const { error: eroareUpload } = await supabase.storage
+          .from("produse")
+          .upload(numeFisier, mic, {
+            cacheControl: "31536000",
+            upsert: false,
+            contentType: "image/webp",
+          });
+        if (eroareUpload) throw eroareUpload;
+
+        const { data: url } = supabase.storage.from("produse").getPublicUrl(numeFisier);
+
+        const { error: eroareUpdate } = await supabase
+          .from("produse")
+          .update({ imagine: url.publicUrl })
+          .eq("id", produs.id);
+        if (eroareUpdate) throw eroareUpdate;
+
+        micsorate++;
+        economisit += blob.size - mic.size;
+      } catch (eroare) {
+        console.error("Eroare la", produs.nume, eroare);
+        erori++;
+      }
+    }
+
+    scrieStare(
+      `Gata!\nMicșorate: ${micsorate} · Deja mici: ${sarite} · Erori: ${erori}\n` +
+      `Spațiu economisit: ${(economisit / 1048576).toFixed(1)} MB\n` +
+      `Site-ul se republică automat în câteva minute.`
+    );
+    butonOptimizare.disabled = false;
   });
 </script>  </body>
 </html>
