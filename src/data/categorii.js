@@ -34,9 +34,4 @@ export const categorii = [
     slug: "consumabile",
     imagine: "/images/categorii/consumabile-robena-trading.png",
   },
-  {
-    nume: "Alte produse",
-    slug: "alte-produse",
-    imagine: "/images/categorii/alte-produse-robena-trading.png",
-  },
 ];

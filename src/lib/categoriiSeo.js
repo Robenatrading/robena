@@ -29,15 +29,15 @@ export const categoriiSeo = {
   },
   aparatura: {
     descriere:
-      "Aparatură medicală: defibrilatoare AED, monitoare de funcții vitale, aspiratoare chirurgicale, concentratoare de oxigen, tensiometre și pulsoximetre.",
+      "Aparatură medicală: defibrilatoare AED, monitoare de funcții vitale, aspiratoare chirurgicale, tensiometre, pulsoximetre și cântare cu taliometru.",
     intro:
-      "Aparatură medicală pentru spitale, clinici, cabinete și servicii de urgență: defibrilatoare externe automate (AED), monitoare pentru funcții vitale, aspiratoare chirurgicale, concentratoare de oxigen, nebulizatoare, tensiometre și pulsoximetre profesionale.",
+      "Aparatură medicală pentru spitale, clinici, cabinete și servicii de urgență: defibrilatoare externe automate (AED), monitoare pentru funcții vitale, aspiratoare chirurgicale, concentratoare de oxigen, nebulizatoare, tensiometre și pulsoximetre profesionale, cântare medicale cu taliometru.",
   },
   echipamente: {
     descriere:
-      "Echipamente pentru unități sanitare: cărucioare medicale multifuncționale, cărucioare platformă din inox și saltele antidecubit cu compresor.",
+      "Echipamente pentru unități sanitare: cărucioare medicale și platformă, scaune de transport pacienți, scaune WC, saltele antidecubit, scări din aluminiu.",
     intro:
-      "Echipamente pentru spitale, centre de îngrijire și unități sanitare: cărucioare medicale multifuncționale cu sertare, cărucioare de transfer și cărucioare platformă pliabile din inox, saltele antidecubit tubulare cu compresor.",
+      "Echipamente pentru spitale, centre de îngrijire și unități sanitare: cărucioare medicale multifuncționale cu sertare, cărucioare de transfer și cărucioare platformă pliabile din inox, saltele antidecubit tubulare cu compresor, scaune pliabile pentru transportul pacienților, scaune WC de cameră și scări profesionale din aluminiu.",
   },
   textile: {
     descriere:
@@ -47,15 +47,9 @@ export const categoriiSeo = {
   },
   consumabile: {
     descriere:
-      "Consumabile medicale și de curățenie: seringi sterile, mănuși de unică folosință, saci menajeri, lavete, bureți și folie stretch pentru ambalare.",
+      "Consumabile medicale și de curățenie: seringi sterile, mănuși, saci menajeri, saci pentru transport cadavre, lavete, bureți și folie stretch.",
     intro:
-      "Consumabile pentru unități sanitare, instituții și companii: seringi sterile de unică folosință, mănuși de unică folosință, saci menajeri, lavete și bureți pentru curățenie, folie stretch pentru ambalare.",
-  },
-  "alte-produse": {
-    descriere:
-      "Produse pentru spitale și instituții: cântare medicale cu taliometru, scaune de transport pacienți, scaune WC, cărucioare platformă, scări din aluminiu.",
-    intro:
-      "Alte produse utile pentru spitale, centre de îngrijire și instituții: cântare medicale cu taliometru, scaune pliabile pentru transportul pacienților, scaune WC de cameră, cărucioare platformă, scări din aluminiu și saci pentru transport.",
+      "Consumabile pentru unități sanitare, instituții și companii: seringi sterile de unică folosință, mănuși de unică folosință, saci menajeri, saci pentru transport cadavre, lavete și bureți pentru curățenie, folie stretch pentru ambalare.",
   },
   "sterilizare": {
     descriere:

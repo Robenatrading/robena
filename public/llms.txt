@@ -15,7 +15,6 @@ ROBENA TRADING furnizeaza produse din urmatoarele categorii:
 - Echipamente: https://robena.ro/produse/echipamente/
 - Textile: https://robena.ro/produse/textile/
 - Consumabile: https://robena.ro/produse/consumabile/
-- Alte produse: https://robena.ro/produse/alte-produse/
 - Sterilizare: https://robena.ro/produse/sterilizare/
 - Dezinfectanti: https://robena.ro/produse/dezinfectanti/
 - Echipamente de protectie: https://robena.ro/produse/echipamente-de-protectie/
@@ -24,7 +23,7 @@ ROBENA TRADING furnizeaza produse din urmatoarele categorii:
 
 ## Despre ROBENA TRADING
 
-ROBENA TRADING furnizeaza mobilier medical, mobilier metalic, mobilier de birou, aparatura, echipamente, textile, consumabile si alte produse profesionale.
+ROBENA TRADING furnizeaza mobilier medical, mobilier metalic, mobilier de birou, aparatura medicala, echipamente, textile, consumabile, produse pentru sterilizare si dezinfectie, echipamente de protectie, produse ATI si urgenta si instrumentar chirurgical.
 
 Produsele sunt destinate spitalelor, clinicilor, institutiilor publice, scolilor, companiilor, organizatiilor si persoanelor fizice din Romania.
 
