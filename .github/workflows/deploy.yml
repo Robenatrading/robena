@@ -49,6 +49,10 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
+        with:
+          # Cu multe poze, publicarea poate dura peste 10 minute (limita
+          # implicită) și GitHub raportează „failure”. Îi dăm 30 de minute.
+          timeout: 1800000
 
       # Golește automat cache-ul Cloudflare după fiecare publicare,
       # ca toată lumea să vadă imediat varianta nouă a site-ului.
