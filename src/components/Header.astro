@@ -8,7 +8,7 @@ const categorii = await categoriiSite();
   class="sticky top-0 z-50 border-b border-slate-200 bg-white/95 backdrop-blur"
 >
   <div
-    class="mx-auto flex max-w-7xl items-center justify-between px-6 py-3"
+    class="mx-auto flex max-w-7xl items-center justify-between gap-2 px-4 py-3 sm:px-6"
   >
     <!-- Logo -->
     <a
@@ -22,13 +22,13 @@ const categorii = await categoriiSite();
         width="600"
         height="400"
         fetchpriority="high"
-        class="h-24 w-auto object-contain md:h-32"
+        class="h-20 w-auto object-contain sm:h-24 md:h-32"
       />
     </a>
 
-    <!-- Meniu -->
+    <!-- Meniu desktop (de la 1024 px în sus) -->
     <nav
-      class="hidden items-center gap-8 text-sm font-semibold text-slate-700 md:flex"
+      class="hidden items-center gap-8 text-sm font-semibold text-slate-700 lg:flex"
     >
       <a
         class="transition hover:text-blue-700"
@@ -38,15 +38,17 @@ const categorii = await categoriiSite();
       </a>
 
       <!-- Produse -->
-      <div class="group relative">
+      <div id="meniu-produse-desktop" class="group relative">
         <a
+          id="link-produse-desktop"
           href="/#produse"
+          aria-haspopup="true"
           class="flex items-center gap-2 py-5 transition hover:text-blue-700"
         >
           Produse
 
           <svg
-            class="h-4 w-4 transition-transform duration-200 group-hover:rotate-180"
+            class="h-4 w-4 transition-transform duration-200 group-hover:rotate-180 group-[.deschis]:rotate-180"
             viewBox="0 0 20 20"
             fill="currentColor"
             aria-hidden="true"
@@ -64,7 +66,9 @@ const categorii = await categoriiSite();
           class="invisible absolute left-1/2 top-full z-[100] w-64
                  -translate-x-1/2 pt-2 opacity-0
                  transition-all duration-200
-                 group-hover:visible group-hover:opacity-100"
+                 group-hover:visible group-hover:opacity-100
+                 group-focus-within:visible group-focus-within:opacity-100
+                 group-[.deschis]:visible group-[.deschis]:opacity-100"
         >
           <div
             class="rounded-2xl border border-slate-200 bg-white p-3 shadow-xl"
@@ -98,14 +102,14 @@ const categorii = await categoriiSite();
       </a>
     </nav>
 
-    <!-- Lupă + buton ofertă -->
-    <div class="flex items-center gap-3">
+    <!-- Lupă + buton ofertă + meniu (telefon/tabletă) -->
+    <div class="flex items-center gap-1 sm:gap-3">
       <button
         id="buton-cautare-produse"
         type="button"
         aria-label="Caută produse"
         aria-expanded="false"
-        class="flex h-11 w-11 items-center justify-center rounded-full text-slate-700 transition hover:bg-slate-100 hover:text-blue-700"
+        class="flex h-10 w-10 items-center justify-center rounded-full text-slate-700 transition hover:bg-slate-100 hover:text-blue-700 sm:h-11 sm:w-11"
       >
         <svg
           class="h-6 w-6"
@@ -124,12 +128,106 @@ const categorii = await categoriiSite();
 
       <a
         href="/contact/"
-        class="rounded-lg bg-blue-700 px-4 py-3 text-sm font-semibold text-white transition hover:bg-blue-800 md:px-6 md:py-4"
+        class="whitespace-nowrap rounded-lg bg-blue-700 px-3 py-2.5 text-[13px] font-semibold text-white transition hover:bg-blue-800 max-[379px]:hidden sm:px-4 sm:py-3 sm:text-sm md:px-6 md:py-4"
       >
         Solicită ofertă
       </a>
+
+      <!-- Buton meniu (telefon și tabletă, sub 1024 px) -->
+      <button
+        id="buton-meniu-mobil"
+        type="button"
+        aria-label="Deschide meniul"
+        aria-expanded="false"
+        aria-controls="meniu-mobil"
+        class="flex h-10 w-10 items-center justify-center rounded-full text-slate-700 transition hover:bg-slate-100 hover:text-blue-700 sm:h-11 sm:w-11 lg:hidden"
+      >
+        <svg
+          id="icon-meniu-deschide"
+          class="h-6 w-6"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          aria-hidden="true"
+        >
+          <path d="M4 6h16"></path>
+          <path d="M4 12h16"></path>
+          <path d="M4 18h16"></path>
+        </svg>
+        <svg
+          id="icon-meniu-inchide"
+          class="hidden h-6 w-6"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          aria-hidden="true"
+        >
+          <path d="M6 6l12 12"></path>
+          <path d="M18 6 6 18"></path>
+        </svg>
+      </button>
     </div>
   </div>
+
+  <!-- Meniu telefon / tabletă -->
+  <nav
+    id="meniu-mobil"
+    aria-label="Meniu principal"
+    class="hidden max-h-[calc(100vh-7rem)] overflow-y-auto border-t border-slate-200 bg-white shadow-lg lg:hidden"
+  >
+    <div class="mx-auto max-w-7xl px-4 py-4 sm:px-6">
+      <a
+        href="/"
+        class="block rounded-lg px-3 py-3 font-semibold text-slate-800 hover:bg-slate-100 hover:text-blue-700"
+      >
+        Acasă
+      </a>
+
+      <p class="mt-2 px-3 pb-1 pt-3 text-xs font-bold uppercase tracking-wide text-slate-500">
+        Produse
+      </p>
+
+      <div class="grid gap-x-4 sm:grid-cols-2 md:grid-cols-3">
+        {
+          categorii.map((c) => (
+            <a
+              href={`/produse/${c.slug}/`}
+              class="block rounded-lg px-3 py-3 text-slate-700 hover:bg-slate-100 hover:text-blue-700"
+            >
+              {c.nume}
+            </a>
+          ))
+        }
+      </div>
+
+      <div class="mt-2 border-t border-slate-200 pt-2">
+        <a
+          href="/despre/"
+          class="block rounded-lg px-3 py-3 font-semibold text-slate-800 hover:bg-slate-100 hover:text-blue-700"
+        >
+          Despre noi
+        </a>
+
+        <a
+          href="/contact/"
+          class="block rounded-lg px-3 py-3 font-semibold text-slate-800 hover:bg-slate-100 hover:text-blue-700"
+        >
+          Contact
+        </a>
+
+        <a
+          href="/contact/"
+          class="mt-3 block rounded-lg bg-blue-700 px-4 py-3 text-center font-semibold text-white hover:bg-blue-800"
+        >
+          Solicită ofertă
+        </a>
+      </div>
+    </div>
+  </nav>
 
   <!-- Zona de căutare -->
   <div
@@ -665,4 +763,64 @@ const categorii = await categoriiSite();
       }
     }
   );
+
+  /* ---------------------------------------------------------
+     Meniul pentru telefon și tabletă (butonul cu 3 linii)
+     --------------------------------------------------------- */
+  const butonMeniu = document.querySelector("#buton-meniu-mobil");
+  const meniuMobil = document.querySelector("#meniu-mobil");
+  const iconDeschide = document.querySelector("#icon-meniu-deschide");
+  const iconInchide = document.querySelector("#icon-meniu-inchide");
+
+  function seteazaMeniuMobil(deschis) {
+    meniuMobil.classList.toggle("hidden", !deschis);
+    iconDeschide.classList.toggle("hidden", deschis);
+    iconInchide.classList.toggle("hidden", !deschis);
+    butonMeniu.setAttribute("aria-expanded", String(deschis));
+    butonMeniu.setAttribute(
+      "aria-label",
+      deschis ? "Închide meniul" : "Deschide meniul"
+    );
+  }
+
+  butonMeniu.addEventListener("click", () => {
+    const deschis = meniuMobil.classList.contains("hidden");
+    if (deschis) inchidePanoulCautare();
+    seteazaMeniuMobil(deschis);
+  });
+
+  // Când se deschide căutarea, meniul se închide (să nu se suprapună).
+  butonCautare.addEventListener("click", () => seteazaMeniuMobil(false));
+
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape") seteazaMeniuMobil(false);
+  });
+
+  // Dacă fereastra se lărgește peste 1024 px (ex. tabletă rotită),
+  // meniul mobil se închide, fiindcă apare meniul desktop.
+  window.matchMedia("(min-width: 1024px)").addEventListener("change", (e) => {
+    if (e.matches) seteazaMeniuMobil(false);
+  });
+
+  /* ---------------------------------------------------------
+     Meniul desktop pe ecrane tactile (tablete mari, în landscape):
+     prima atingere pe „Produse” deschide lista de categorii,
+     a doua atingere duce la secțiunea de produse.
+     --------------------------------------------------------- */
+  const grupProduse = document.querySelector("#meniu-produse-desktop");
+  const linkProduse = document.querySelector("#link-produse-desktop");
+  const faraHover = window.matchMedia("(hover: none)");
+
+  linkProduse.addEventListener("click", (event) => {
+    if (faraHover.matches && !grupProduse.classList.contains("deschis")) {
+      event.preventDefault();
+      grupProduse.classList.add("deschis");
+    }
+  });
+
+  document.addEventListener("click", (event) => {
+    if (!grupProduse.contains(event.target)) {
+      grupProduse.classList.remove("deschis");
+    }
+  });
 </script>

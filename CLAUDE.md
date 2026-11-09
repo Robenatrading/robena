@@ -27,6 +27,11 @@
 - 7 nov. 2026: tranșa 1 de poze (6 categorii + 37 produse) publicată; „Alte produse” desființată efectiv (6 produse mutate, redirecționări adăugate).
 - 7 nov. 2026: 50 de produse noi preluate de pe neomed.ro (Robert are acordul Neomed): pozele lor, decupate fără fundal (WebP, max 800 px), și descrieri SEO originale (nume generice, fără mărci/coduri). Ordine 154–203. Paturile albe pe fundal gri au fost „albite” (fundal → alb) în loc de decupate.
 - Pentru texte mari în SQL Editor (Supabase): se încarcă fișierul .sql printr-un input de fișier injectat în pagină, nu prin tastare.
+- 9 nov. 2026: încă 50 de produse noi (medical-expert.ro + neomed.ro; Robert are acordul lor), ordine 204–253, descrieri originale, fără mărci. medtehnica.ro nu are catalog de produse (doar prezentare Philips).
+- 9 nov. 2026: toate pozele de produs standardizate: decupate la obiect, margine egală de 3%, max. 800 px, WebP transparent. Cele 15 poze din Supabase Storage au fost mutate în `public/images/produse/catalog/`. Rămâne de înlocuit poza „Birou profesional în L” (e o fotografie de birou mobilat, nu decupată).
+- 9 nov. 2026: descrieri unificate (Caracteristici + Domenii de utilizare + paragraf final ofertă/SEAP). Copie a textelor vechi: `backup/backup-produse-2026-11-09.json`.
+- 9 nov. 2026: meniul de categorii e alfabetic (`categoriiSite.js`); meniu nou pentru telefon/tabletă (buton cu 3 linii, sub 1024 px) în `Header.astro`.
+- Build-ul local (`astro build`) e blocat de Windows (Application Control blochează binarul nativ Astro); se verifică pe site după publicare.
 
 ## Ce mai e de făcut
 - Lipsesc pozele Gemini pentru: categoriile Aparatură medicală, Consumabile, Echipamente, Instrumentar chirurgical, Mobilier medical, Sterilizare (format orizontal 3:2) și grilele de produse vechi P02, P04, P06, P08, P10, P12, P14:

@@ -17,7 +17,11 @@ export function categoriiSite() {
       if (error) {
         throw new Error(`Categoriile nu au putut fi încărcate: ${error.message}`);
       }
-      return data ?? [];
+      // Meniul de sus (desktop, tabletă, telefon) afișează categoriile
+      // în ordine alfabetică, după regulile limbii române (Ă, Â, Î, Ș, Ț).
+      return (data ?? []).sort((a, b) =>
+        a.nume.localeCompare(b.nume, "ro", { sensitivity: "base" })
+      );
     });
 
   return promisiune;
